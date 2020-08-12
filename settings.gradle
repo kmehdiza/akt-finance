@@ -1,0 +1,3 @@
+rootProject.name = 'akt'
+include 'akt-user-management-ms'
+include 'akt-applications-ms'
