@@ -19,7 +19,7 @@ public class User {
 
     private Long id;
 
-    private String email;
+    private String username;
 
     @JsonIgnore
     private String password;
@@ -27,10 +27,9 @@ public class User {
     @JsonIgnore
     @ManyToMany
     @JoinTable(
-            name = "admins_authority",
+            name = "user_authority",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
-
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 }
