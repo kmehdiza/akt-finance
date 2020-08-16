@@ -9,6 +9,14 @@ allprojects {
         mavenCentral()
         jcenter()
     }
+
+    apply plugin: 'java'
+
+    dependencies {
+        implementation "io.jsonwebtoken:jjwt-api:${jwt_version}"
+        implementation "io.jsonwebtoken:jjwt-impl:${jwt_version}"
+        implementation "io.jsonwebtoken:jjwt-jackson:${jwt_version}"
+    }
 }
 
 subprojects {

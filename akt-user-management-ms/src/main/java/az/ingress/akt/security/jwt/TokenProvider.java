@@ -1,12 +1,13 @@
 package az.ingress.akt.security.jwt;
 
-import az.ibar.demo.config.properties.ApplicationProperties;
+import az.ingress.akt.config.ApplicationProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class TokenProvider implements InitializingBean {
 
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
@@ -37,10 +39,6 @@ public class TokenProvider implements InitializingBean {
     private long tokenValidityInMillisecondsForRememberMe;
 
     private final ApplicationProperties applicationProperties;
-
-    public TokenProvider(ApplicationProperties applicationProperties) {
-        this.applicationProperties = applicationProperties;
-    }
 
     @Override
     public void afterPropertiesSet() throws Exception {

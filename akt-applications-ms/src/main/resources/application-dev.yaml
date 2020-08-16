@@ -1,0 +1,3 @@
+application:
+  security:
+    secret: ${SECRET_KEY:VGhpcyBteSBzZWNyZXQga2V5IGZvciBBcHBsaWNhdGlvbi4gUGxlYXNlIGNoYW5nZSBpbiBwcm9kdWN0aW9uLg==}
