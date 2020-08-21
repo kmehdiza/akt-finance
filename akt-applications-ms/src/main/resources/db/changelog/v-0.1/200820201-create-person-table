@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: 200820201
+      author: tural
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: persons_pkey
+                  name: id
+                  type: bigint
+              - column:
+                  name: application_id
+                  type: bigint
+              - column:
+                  name: type
+                  type: varchar(255)
+              - column:
+                  name: fin_code
+                  type: varchar(255)
+              - column:
+                  name: full_name
+                  type: varchar(255)
+              - column:
+                  name: id_image1
+                  type: varchar(255)
+              - column:
+                  name: id_image2
+                  type: varchar(255)
+              - column:
+                  name: signature_image
+                  type: varchar(255)
+            tableName: person

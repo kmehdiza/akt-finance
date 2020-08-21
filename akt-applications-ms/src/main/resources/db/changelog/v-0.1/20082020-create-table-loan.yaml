@@ -1,0 +1,21 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20082020
+      author: tural
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: loan_application_pkey
+                  name: id
+                  type: bigint
+              - column:
+                  name: step
+                  type: varchar(50)
+            tableName: loan_applications
+            
+ 
+    
