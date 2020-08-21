@@ -1,11 +1,10 @@
-package az.ingress.akt.security;
+package az.ingress.user.management.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -13,15 +12,17 @@ import java.util.stream.Stream;
 /**
  * Utility class for Spring Security.
  */
-@Component
 public final class SecurityUtils {
+
+    private SecurityUtils() {
+    }
 
     /**
      * Get the login of the current user.
      *
      * @return the login of the current user.
      */
-    public Optional<String> getCurrentUserLogin() {
+    public static Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .map(authentication -> {
@@ -40,7 +41,7 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public Optional<String> getCurrentUserJWT() {
+    public static Optional<String> getCurrentUserJWT() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
             .filter(authentication -> authentication.getCredentials() instanceof String)
@@ -52,7 +53,7 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public boolean isAuthenticated() {
+    public static boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null &&
             getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
@@ -66,13 +67,13 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public boolean isCurrentUserInRole(String authority) {
+    public static boolean isCurrentUserInRole(String authority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null &&
             getAuthorities(authentication).anyMatch(authority::equals);
     }
 
-    private Stream<String> getAuthorities(Authentication authentication) {
+    private static Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority);
     }

@@ -3,3 +3,16 @@ application:
     secret: ${APP_SECRET_KEY:VGhpcyBteSBzZWNyZXQga2V5IGZvciBBcHBsaWNhdGlvbi4gUGxlYXNlIGNoYW5nZSBpbiBwcm9kdWN0aW9uLg==}
     token-validity-in-seconds: 86400
     token-validity-in-seconds-for-remember-me: 2592000
+  cors:
+    allowed-origins: '*'
+    allowed-methods: '*'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count'
+    allow-credentials: true
+    max-age: 1800
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: &connectionUrl jdbc:mysql://${DB_CONNECTION_IP:34.91.79.78}:${DB_CONNECTION_PORT:3306}/ingress_user_management?createDatabaseIfNotExist=true&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
+    username: &username ${DB_CONNECTION_USERNAME:dba}
+    password: &password ${DB_CONNECTION_PASSWORD:q2w3e4r5t6}
