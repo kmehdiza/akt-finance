@@ -16,6 +16,3 @@ databaseChangeLog:
                   name: step
                   type: varchar(50)
             tableName: loan_applications
-            
- 
-    

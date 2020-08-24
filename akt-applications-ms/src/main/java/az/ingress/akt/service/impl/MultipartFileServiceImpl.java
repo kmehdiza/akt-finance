@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class MultipartFileServiceImpl implements MultipartFileService {
+
     @Override
     public List<String> createImages(List<MultipartFile> images) {
         return images.stream()
