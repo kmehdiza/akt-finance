@@ -24,15 +24,15 @@ public final class SecurityUtils {
     public Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-            .map(authentication -> {
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                    return springSecurityUser.getUsername();
-                } else if (authentication.getPrincipal() instanceof String) {
-                    return (String) authentication.getPrincipal();
-                }
-                return null;
-            });
+                .map(authentication -> {
+                    if (authentication.getPrincipal() instanceof UserDetails) {
+                        UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                        return springSecurityUser.getUsername();
+                    } else if (authentication.getPrincipal() instanceof String) {
+                        return (String) authentication.getPrincipal();
+                    }
+                    return null;
+                });
     }
 
     /**
@@ -40,11 +40,11 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public Optional<String> getCurrentUserJWT() {
+    public Optional<String> getCurrentUserJwt() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+                .filter(authentication -> authentication.getCredentials() instanceof String)
+                .map(authentication -> (String) authentication.getCredentials());
     }
 
     /**
@@ -54,13 +54,12 @@ public final class SecurityUtils {
      */
     public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
+        return authentication != null
+                && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
     }
 
     /**
      * If the current user has a specific authority (security role).
-     * <p>
      * The name of this method comes from the {@code isUserInRole()} method in the Servlet API.
      *
      * @param authority the authority to check.
@@ -68,13 +67,13 @@ public final class SecurityUtils {
      */
     public boolean isCurrentUserInRole(String authority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null &&
-            getAuthorities(authentication).anyMatch(authority::equals);
+        return authentication != null
+                && getAuthorities(authentication).anyMatch(authority::equals);
     }
 
     private Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority);
+                .map(GrantedAuthority::getAuthority);
     }
 
 }

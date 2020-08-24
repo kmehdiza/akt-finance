@@ -1,0 +1,28 @@
+image: gradle:6.4.1-jdk8
+
+services:
+- docker:dind
+
+#cache:
+#  key: "$REPO"
+#  paths:
+#  - .m2/
+
+stages:
+- build
+- release
+#- deploy
+
+build:
+  stage: build
+  script:
+  - gradle build
+  only:
+  - merge_requests
+
+release:develop:
+  stage: release
+  script:
+  - gradle jib -Djib.to.tags=$CI_PIPELINE_ID -Djib.to.auth.username=$CI_REGISTRY_USER -Djib.to.auth.password=$CI_REGISTRY_PASSWORD
+  only:
+  - develop

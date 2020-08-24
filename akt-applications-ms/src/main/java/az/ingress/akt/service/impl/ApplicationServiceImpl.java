@@ -24,7 +24,6 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (!userManagementClient.isUserActive(username)) {
             throw new UserIsNotActiveException();
         }
-        System.out.println(username);
         return username;
     }
 

@@ -2,8 +2,7 @@ package az.ingress.user.management.security;
 
 import az.ingress.user.management.domain.User;
 import az.ingress.user.management.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,9 +16,8 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class DomainUserDetailsService implements UserDetailsService {
-
-    private final Logger log = LoggerFactory.getLogger(DomainUserDetailsService.class);
 
     private final UserRepository userRepository;
 
@@ -36,7 +34,8 @@ public class DomainUserDetailsService implements UserDetailsService {
         String lowercaseUsername = username.toLowerCase(Locale.ENGLISH);
         return userRepository.findOneWithAuthoritiesByUsername(lowercaseUsername)
                 .map(this::createSpringSecurityUser)
-                .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseUsername + " was not found in the database"));
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User " + lowercaseUsername + " was not found in the database"));
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(User user) {
