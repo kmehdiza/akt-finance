@@ -37,3 +37,9 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
+
+jib{
+	to{
+		image = "$dockerRepoUrl/${project.name}:$version"
+	}
+}

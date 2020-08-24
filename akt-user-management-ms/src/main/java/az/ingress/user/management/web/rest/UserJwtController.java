@@ -29,27 +29,27 @@ public class UserJwtController {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
+    public ResponseEntity<JwtToken> authorize(@Valid @RequestBody LoginVM loginVM) {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        boolean rememberMe = (loginVM.getRememberMe() == null) ? false : loginVM.getRememberMe();
+        boolean rememberMe = loginVM.getRememberMe() != null && loginVM.getRememberMe();
         String jwt = tokenProvider.createToken(authentication, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(new JwtToken(jwt), httpHeaders, HttpStatus.OK);
     }
 
     /**
      * Object to return as body in JWT Authentication.
      */
-    static class JWTToken {
+    static class JwtToken {
 
         private String idToken;
 
-        JWTToken(String idToken) {
+        JwtToken(String idToken) {
             this.idToken = idToken;
         }
 

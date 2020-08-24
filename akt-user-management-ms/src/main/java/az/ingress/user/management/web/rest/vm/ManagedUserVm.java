@@ -14,8 +14,4 @@ public class ManagedUserVm extends UserDto {
     @Size(max = Constants.PASSWORD_MAX_LENGTH, min = Constants.PASSWORD_MIN_LENGTH)
     private String password;
 
-    public ManagedUserVm() {
-        // Empty constructor needed for Jackson.
-    }
-
 }
