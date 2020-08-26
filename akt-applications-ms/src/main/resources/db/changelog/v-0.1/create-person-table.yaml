@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 200820201
+      id: create-person-table
       author: tural
       changes:
         - createTable:

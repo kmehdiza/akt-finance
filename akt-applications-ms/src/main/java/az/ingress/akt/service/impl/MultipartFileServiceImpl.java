@@ -10,10 +10,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class MultipartFileServiceImpl implements MultipartFileService {
 
     @Override
-    public List<String> createImages(List<MultipartFile> images) {
+    public List<String> uploadImages(List<MultipartFile> images) {
         return images.stream()
                 .map(m -> m.toString())
                 .collect(Collectors.toList());
     }
-
 }

@@ -1,5 +1,6 @@
-package az.ingress.akt.model;
+package az.ingress.akt.domain;
 
+import az.ingress.akt.domain.enums.Type;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -19,7 +20,7 @@ import lombok.Data;
 public class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
@@ -37,5 +38,5 @@ public class Person {
     @JoinColumn(name = "application_id")
     private Loan loan;
 
-    private String signatureIimage;
+    private String signatureImage;
 }

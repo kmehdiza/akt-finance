@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 20082020
+      id: create-loan-table
       author: tural
       changes:
         - createTable:
@@ -15,4 +15,10 @@ databaseChangeLog:
               - column:
                   name: step
                   type: varchar(50)
+              - column:
+                  name: agent_username
+                  type: varchar(255)
+              - column:
+                  name: customer_Fin
+                  type: varchar(10)
             tableName: loan_applications

@@ -5,6 +5,6 @@ application:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_CONNECTION_ADDR:localhost}:3306/studentbytural?createDatabaseIfNotExist=true&useSSL=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://${DB_CONNECTION_ADDR:localhost}:3306/akt_backend?createDatabaseIfNotExist=true&useSSL=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
     username: root
     password: password

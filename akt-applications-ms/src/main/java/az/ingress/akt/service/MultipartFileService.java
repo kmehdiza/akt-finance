@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface MultipartFileService {
 
-    List<String> createImages(List<MultipartFile> images);
+    List<String> uploadImages(List<MultipartFile> images);
 
 }
