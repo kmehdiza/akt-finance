@@ -1,4 +1,4 @@
-image: jdk11-alpine
+image: gradle:6.4.1-jdk11
 
 services:
 - docker:dind
