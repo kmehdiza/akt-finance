@@ -13,7 +13,7 @@ stages:
 - release
 #- deploy
 javaVersion:
-  stage: javaVersion
+  stage: pre
   script:
     - java --version
   only:
