@@ -16,8 +16,8 @@ javaVersion:
   stage: javaVersion
   script:
     - java --version
-    only:
-      - merge_requests
+  only:
+    - merge_requests
 
 build:
   stage: build
