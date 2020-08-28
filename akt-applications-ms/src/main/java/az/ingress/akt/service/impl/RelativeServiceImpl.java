@@ -3,11 +3,15 @@ package az.ingress.akt.service.impl;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.Person;
 import az.ingress.akt.domain.enums.Step;
+import az.ingress.akt.domain.enums.Type;
+import az.ingress.akt.dto.GetRelativeDto;
 import az.ingress.akt.dto.RelativeDto;
 import az.ingress.akt.exception.ApplicationNotFoundException;
 import az.ingress.akt.exception.ApplicationStepException;
 import az.ingress.akt.exception.ImagesCountException;
 import az.ingress.akt.exception.PersonByFinCodeAlreadyExistException;
+import az.ingress.akt.exception.PersonDoesNotExist;
+import az.ingress.akt.exception.TypeIsNotRelativeException;
 import az.ingress.akt.exception.UserNotFoundException;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
@@ -42,6 +46,30 @@ public class RelativeServiceImpl implements RelativeService {
         checkIfPersonExist(relativeDto);
         Person relative = relativeDtoToPerson(relativeDto, file);
         personRepository.save(relative);
+    }
+
+    @Override
+    public GetRelativeDto getRelative(Long applicationId) {
+        checkIfLoanExist(applicationId, getAgentUsername());
+        Person person = checkIfPersonExistByApplicationId(applicationId);
+        checkIfNotDebtor(person.getType());
+        return GetRelativeDto.builder()
+                .type(person.getType())
+                .finCode(person.getFinCode())
+                .fullName(person.getFullName())
+                .build();
+    }
+
+    private void checkIfNotDebtor(Type type) {
+        if (type.equals(Type.DEBTOR)){
+            throw new TypeIsNotRelativeException(type);
+        }
+    }
+
+    private Person checkIfPersonExistByApplicationId(Long applicationId) {
+        Optional<Person> personOptional = Optional.ofNullable(personRepository.findByApplicationId(applicationId)
+                .orElseThrow(() -> new PersonDoesNotExist(applicationId)));
+        return personOptional.get();
     }
 
     private void checkLoanStep(Loan loan) {
