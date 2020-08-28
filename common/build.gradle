@@ -1,4 +1,5 @@
 plugins {
+    id 'java-library'
     id 'org.springframework.boot'
     id 'io.spring.dependency-management'
     id 'java'
@@ -6,6 +7,14 @@ plugins {
 
 repositories {
     mavenCentral()
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }
 
 dependencies {
