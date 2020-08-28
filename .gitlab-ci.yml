@@ -16,7 +16,7 @@ stages:
 build:
   stage: build
   script:
-  - gradle build
+  - ./gradlew build
   only:
   - merge_requests
 
