@@ -4,7 +4,6 @@ import az.ingress.akt.dto.ExceptionDto;
 import az.ingress.akt.exception.ApplicationNotFoundException;
 import az.ingress.akt.exception.ApplicationStepException;
 import az.ingress.akt.exception.ImagesCountException;
-import az.ingress.akt.exception.LoanDoesNotExistException;
 import az.ingress.akt.exception.PersonByFinCodeAlreadyExistException;
 import az.ingress.akt.exception.UserNotFoundException;
 import java.io.IOException;
@@ -58,15 +57,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(LoanDoesNotExistException.class)
-    public final ResponseEntity<ExceptionDto> handleLoanDoesNotExistException(LoanDoesNotExistException ex) {
-        ExceptionDto exceptionDto = new ExceptionDto(HttpStatus.NOT_FOUND.value(),
-                ex.getMessage(),
-                ex.getMessage(),
-                Calendar.getInstance());
-        log.warn(ex.getMessage());
-        return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
-    }
 
     @ExceptionHandler(UserNotFoundException.class)
     public final ResponseEntity<ExceptionDto> handleLoanDoesNotExistException(UserNotFoundException ex) {
