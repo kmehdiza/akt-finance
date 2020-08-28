@@ -16,7 +16,7 @@ stages:
 build:
   stage: build
   script:
-  - java -version
+  - java
   only:
   - merge_requests
 
