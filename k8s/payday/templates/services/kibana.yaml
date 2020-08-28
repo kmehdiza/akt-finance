@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-kibana
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ template "fullname" . }}-kibana
+  ports:
+    - protocol: TCP
+      port: {{ .Values.services.kibana.port }}

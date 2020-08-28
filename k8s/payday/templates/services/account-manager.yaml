@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-account-manager
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ template "fullname" . }}-account-manager
+  ports:
+    - protocol: TCP
+      port: {{ .Values.services.accountManager.port }}

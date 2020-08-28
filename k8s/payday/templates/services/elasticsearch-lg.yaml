@@ -1,0 +1,12 @@
+#@ToDo: remove this when logstash is able to detect it dynamically
+kind: Service
+apiVersion: v1
+metadata:
+  name: elasticsearch
+spec:
+  type: ClusterIP
+  selector:
+    app:  {{ template "fullname" . }}-elasticsearch
+  ports:
+    - protocol: TCP
+      port: {{ .Values.services.elasticsearch.port }}

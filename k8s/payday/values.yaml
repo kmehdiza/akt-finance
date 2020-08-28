@@ -1,0 +1,61 @@
+services:
+  accountManager:
+    replicaCount: 1
+    port: '8080'
+    image:  ingressgroup/account-manager
+    tag: '0.1.7e65e49'
+  exchangeShims:
+    replicaCount: 1
+    port: '8081'
+    image:  ingressgroup/exchange-shims
+    tag: '0.1.0d8dbc0'
+  fakeExchange:
+    replicaCount: 1
+    port: '8082'
+    image:  ingressgroup/fake-exchange
+    tag: '0.1.7e65e49'
+  notifications:
+    replicaCount: 1
+    port: '8083'
+    image:  ingressgroup/notifications
+    tag: '0.1.7e65e49'
+  volatilityCalculator:
+    replicaCount: 1
+    port: '8084'
+    image:  ingressgroup/volatility-calculator
+    tag: '0.1.7e65e49'
+  postgress:
+    replicaCount: 1
+    port: '5432'
+    image:  postgres
+    tag: '11.3'
+  redis:
+    replicaCount: 1
+    port: '6379'
+    image:  redis
+    tag: '5.0.6'
+  zookeeper:
+    replicaCount: 1
+    port: '2181'
+    image:  wurstmeister/zookeeper
+    tag: 'latest'
+  kafka:
+    replicaCount: 1
+    port: '9092'
+    image:  wurstmeister/kafka
+    tag: 'latest'
+  elasticsearch:
+    replicaCount: 1
+    port: 9092
+    image:  docker.elastic.co/elasticsearch/elasticsearch
+    tag: '7.8.1'
+  kibana:
+    replicaCount: 1
+    port:  5601
+    image:  docker.elastic.co/kibana/kibana
+    tag: '7.8.1'
+  logstash:
+    replicaCount: 1
+    port:  5000
+    image:  ingressgroup/logstash
+    tag: '7.8.1'

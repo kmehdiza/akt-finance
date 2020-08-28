@@ -1,0 +1,6 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: payday-prod
+  labels:
+    name: payday-prod

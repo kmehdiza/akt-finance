@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-volatility-calculator
+spec:
+  replicas: {{ .Values.services.volatilityCalculator.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-volatility-calculator
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-volatility-calculator
+    spec:
+      nodeSelector:
+#        environment: {{ .Release.Name }}
+      containers:
+        - name: {{ template "fullname" . }}-volatility-calculator
+          image: {{ .Values.services.volatilityCalculator.image }}:{{ .Values.services.volatilityCalculator.tag }}
+          resources:
+            limits:
+              memory: "300Mi"
+              cpu: "300m"
+            requests:
+              memory: "200Mi"
+              cpu: "200m"
+          ports:
+            - containerPort: {{ .Values.services.volatilityCalculator.port }}
+          env:
+            - name: DB_HOST
+              value: {{ template "fullname" . }}-postgress
+            - name: SHIMS_HOST
+              value: {{ template "fullname" . }}-exchange-shims
+            - name: EXCHANGE_HOST
+              value: {{ template "fullname" . }}-fake-exchange
+            - name: KAFKA_HOST
+              value: {{ template "fullname" . }}-kafka
+            - name: REDIS_HOST
+              value: {{ template "fullname" . }}-redis
+            - name: LOGSTASH_HOST
+              value: {{ template "fullname" . }}-logstash

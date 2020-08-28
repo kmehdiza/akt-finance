@@ -1,0 +1,10 @@
+#Prod specific configs
+domains:
+  protocol: https
+  app: payday.com
+  callback_url:
+
+#@Todo  Update this to replace the hard coded password
+postgress:
+  password: test
+  username: test

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-kafka
+spec:
+  replicas: {{ .Values.services.kafka.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-kafka
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-kafka
+    spec:
+      nodeSelector:
+      #        environment: {{ .Release.Name }}
+      containers:
+        - name: {{ template "fullname" . }}-kafka
+          image: {{ .Values.services.kafka.image }}:{{ .Values.services.kafka.tag }}
+          resources:
+            limits:
+              memory: "1000Mi"
+              cpu: "600m"
+            requests:
+              memory: "800Mi"
+              cpu: "400m"
+          ports:
+            - containerPort: {{ .Values.services.kafka.port }}
+# @ToDo discover zookeeper dynamically, replace port and name with template
+          env:
+            - name: KAFKA_ADVERTISED_HOST_NAME
+              value: {{ template "fullname" . }}-kafka
+            - name: KAFKA_ZOOKEEPER_CONNECT
+              value:  {{ template "fullname" . }}-zookeeper:2181

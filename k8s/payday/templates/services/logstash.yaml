@@ -1,0 +1,18 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-logstash
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ template "fullname" . }}-logstash
+  ports:
+    - protocol: TCP
+      name: logstahs-tcp
+      port: {{ .Values.services.logstash.port }}
+    - protocol: UDP
+      name: logstash-udp
+      port: 5000
+    - protocol: TCP
+      name: logstash
+      port: 9600

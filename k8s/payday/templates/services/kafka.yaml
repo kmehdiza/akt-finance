@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ template "fullname" . }}-kafka
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ template "fullname" . }}-kafka
+  ports:
+    - protocol: TCP
+      port: {{ .Values.services.kafka.port }}

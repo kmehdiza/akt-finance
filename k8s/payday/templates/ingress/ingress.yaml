@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: {{ template "fullname" . }}-ingress
+  annotations:
+    #    ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/default-backend: {{ template "fullname" . }}-account-manager
+spec:
+  rules:
+    - host: {{ .Values.domains.app }}
+      http:
+        paths:
+          - path: /()(.*)
+            backend:
+              serviceName: {{ template "fullname" . }}-account-manager
+              servicePort: {{ .Values.services.accountManager.port }}

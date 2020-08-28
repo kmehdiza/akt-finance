@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-logstash
+spec:
+  replicas: {{ .Values.services.logstash.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-logstash
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-logstash
+    spec:
+      nodeSelector:
+#        environment: {{ .Release.Name }}
+      containers:
+        - name: {{ template "fullname" . }}-logstash
+          image: {{ .Values.services.logstash.image }}:{{ .Values.services.logstash.tag }}
+          resources:
+            limits:
+              memory: "1200Mi"
+              cpu: "800m"
+            requests:
+              memory: "600Mi"
+              cpu: "600m"
+          ports:
+            - containerPort: {{ .Values.services.logstash.port }}

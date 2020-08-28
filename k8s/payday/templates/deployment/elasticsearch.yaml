@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "fullname" . }}-elasticsearch
+spec:
+  replicas: {{ .Values.services.elasticsearch.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "fullname" . }}-elasticsearch
+  template:
+    metadata:
+      labels:
+        app: {{ template "fullname" . }}-elasticsearch
+    spec:
+      nodeSelector:
+#        environment: {{ .Release.Name }}
+      containers:
+        - name: {{ template "fullname" . }}-elasticsearch
+          image: {{ .Values.services.elasticsearch.image }}:{{ .Values.services.elasticsearch.tag }}
+          resources:
+            limits:
+              memory: "2400Mi"
+              cpu: "600m"
+            requests:
+              memory: "1200Mi"
+              cpu: "400m"
+          ports:
+            - containerPort: {{ .Values.services.elasticsearch.port }}
+          volumeMounts:
+            - name: elastic-data
+              mountPath: "/usr/share/elasticsearch/data"
+          env:
+            - name:  node.name
+              value: {{ template "fullname" . }}-elasticsearch
+            - name:  cluster.name
+              value: {{ template "fullname" . }}-es-cluster
+            - name:  discovery.seed_hosts
+              value: {{ template "fullname" . }}-elasticsearch
+            - name:  cluster.initial_master_nodes
+              value: {{ template "fullname" . }}-elasticsearch
+#            - name:  bootstrap.memory_lock
+#              value: true
+            - name:  ES_JAVA_OPTS
+              value: "-Xms512m -Xmx512m"
+      volumes:
+         - name: elastic-data
+           persistentVolumeClaim:
+             claimName: {{ template "fullname" . }}-elasticsearch
