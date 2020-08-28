@@ -12,17 +12,11 @@ stages:
 - build
 - release
 #- deploy
-javaVersion:
-  stage: pre
-  script:
-    - java --version
-  only:
-    - merge_requests
 
 build:
   stage: build
   script:
-  - ./gradlew build
+  - java --version
   only:
   - merge_requests
 
