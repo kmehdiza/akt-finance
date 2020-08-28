@@ -12,6 +12,12 @@ stages:
 - build
 - release
 #- deploy
+javaVersion:
+  stage: javaVersion
+  script:
+    - java --version
+    only:
+      - merge_requests
 
 build:
   stage: build
