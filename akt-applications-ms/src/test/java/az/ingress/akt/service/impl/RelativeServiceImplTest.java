@@ -12,29 +12,24 @@ import az.ingress.akt.domain.Person;
 import az.ingress.akt.domain.enums.Step;
 import az.ingress.akt.domain.enums.Type;
 import az.ingress.akt.dto.RelativeDto;
-import az.ingress.akt.exception.ApplicationNotFoundException;
-import az.ingress.akt.exception.ApplicationStepException;
-import az.ingress.akt.exception.ImagesCountException;
-import az.ingress.akt.exception.PersonByFinCodeAlreadyExistException;
-import az.ingress.akt.exception.UserNotFoundException;
-import az.ingress.akt.repository.LoanRepository;
+import az.ingress.akt.exception.AlreadyExistException;
 import az.ingress.akt.repository.PersonRepository;
-import az.ingress.akt.security.SecurityUtils;
+import az.ingress.akt.service.LoanService;
 import az.ingress.akt.service.MultipartFileService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-@RunWith(MockitoJUnitRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class RelativeServiceImplTest {
 
     public static final String DUMMY_IMAGE_JPG = "image1.jpg";
@@ -46,29 +41,32 @@ public class RelativeServiceImplTest {
     public static final String DUMMY_FULL_NAME = "James Smith";
     public static final long DUMMY_APPLICATION_ID = 1L;
     public static final String DUMMY_IMAGE_URL = "image1.jpg";
+
     @Mock
     private PersonRepository personRepository;
-    @Mock
-    private LoanRepository loanRepository;
+
     @Mock
     private MultipartFileService multipartFileService;
+
     @Mock
-    private SecurityUtils securityUtils;
+    private LoanService loanService;
+
     @InjectMocks
     private RelativeServiceImpl relativeService;
+
     private Person person;
     private RelativeDto relativeDto;
     private Loan loan;
-    private MockMultipartFile image1;
     private List<MultipartFile> images;
     private List<String> imagesUrl;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        image1 = new MockMultipartFile(DUMMY_IMAGE_JPG, DUMMY_IMAGE_ORIGINAL_NAME, DUMMY_CONTENT_TYPE,
-                DUMMY_IMAGE_JPG.getBytes(DUMMY_CHARSET_NAME));
+        MockMultipartFile mockImage =
+                new MockMultipartFile(DUMMY_IMAGE_JPG, DUMMY_IMAGE_ORIGINAL_NAME, DUMMY_CONTENT_TYPE,
+                        DUMMY_IMAGE_JPG.getBytes(DUMMY_CHARSET_NAME));
+        images = Arrays.asList(mockImage, mockImage);
 
-        images = Arrays.asList(image1, image1);
         imagesUrl = images.stream()
                 .map(m -> m.toString())
                 .collect(Collectors.toList());
@@ -95,56 +93,18 @@ public class RelativeServiceImplTest {
                 .build();
     }
 
-
     @Test
-    public void givenUserNotFound() {
+    public void givenRelativeByFinCodeAndLoanIdThenAlreadyExistException() {
+        when(loanService.getLoanInfo(anyLong())).thenReturn(loan);
+        when(personRepository.findByFinCodeAndLoanId(anyString(), anyLong()))
+                .thenReturn(Optional.ofNullable(person));
         assertThatThrownBy(() -> relativeService.createRelative(relativeDto, images))
-                .isInstanceOf(UserNotFoundException.class);
+                .isInstanceOf(AlreadyExistException.class);
     }
 
     @Test
-    public void givenApplicationNotFound() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        assertThatThrownBy(() -> relativeService.createRelative(relativeDto, images))
-                .isInstanceOf(ApplicationNotFoundException.class);
-    }
-
-    @Test
-    public void givenImageCountIsNotCorrect() {
-        images = Arrays.asList(image1);
-        imagesUrl = images.stream().map(m -> m.toString()).collect(Collectors.toList());
-        assertThatThrownBy(() -> relativeService.createRelative(relativeDto, images))
-                .isInstanceOf(ImagesCountException.class);
-    }
-
-    @Test
-    public void givenPersonWithFinCodeAlreadyExist() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(Optional.of(loan));
-        when(personRepository.findByFinCode(anyString()))
-                .thenReturn(Optional.of(person));
-        assertThatThrownBy(() -> relativeService.createRelative(relativeDto, images))
-                .isInstanceOf(PersonByFinCodeAlreadyExistException.class);
-    }
-
-    @Test
-    public void givenApplicationStepNotCorrect() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        loan = Loan.builder()
-                .customerFin(DUMMY_CUSTOMER_FIN)
-                .agentUsername(DUMMY_USERNAME)
-                .id(DUMMY_APPLICATION_ID)
-                .step(Step.CREATED)
-                .build();
-        when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(Optional.of(loan));
-        assertThatThrownBy(() -> relativeService.createRelative(relativeDto, images))
-                .isInstanceOf(ApplicationStepException.class);
-    }
-
-    @Test
-    public void givenRelativeSavePerson() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(Optional.of(loan));
+    public void givenRelativeSavePersonIsOk() {
+        when(loanService.getLoanInfo(anyLong())).thenReturn(loan);
         when(multipartFileService.uploadImages(images)).thenReturn(imagesUrl);
         relativeService.createRelative(relativeDto, images);
         verify(personRepository).save(any());

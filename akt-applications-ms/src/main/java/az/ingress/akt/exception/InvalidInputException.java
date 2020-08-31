@@ -1,10 +1,10 @@
 package az.ingress.akt.exception;
 
-public class ImagesCountException extends RuntimeException {
+public class InvalidInputException extends RuntimeException {
 
     private static final long serialVersionUID = 58432132465811L;
 
-    public ImagesCountException(String message) {
+    public InvalidInputException(String message) {
         super(message);
     }
 }

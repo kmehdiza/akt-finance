@@ -6,5 +6,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface RelativeService {
 
-    void createRelative(RelativeDto relativeDto, List<MultipartFile> file);
+    void createRelative(RelativeDto relativeDto, List<MultipartFile> images);
 }

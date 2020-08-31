@@ -8,4 +8,5 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     Optional<Person> findByFinCode(String finCode);
 
+    Optional<Person> findByFinCodeAndLoanId(String finCode, Long applicationId);
 }
