@@ -2,21 +2,16 @@ package az.ingress.akt.web.rest;
 
 import az.ingress.akt.domain.enums.PersonType;
 import az.ingress.akt.dto.GetRelativeDto;
-import az.ingress.akt.dto.RelativeDto;
 import az.ingress.akt.service.RelativeService;
 import java.util.List;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,13 +26,6 @@ public class RelativeController {
     private static final String DEFAULT_PAGE_SIZE = "5";
 
     private final RelativeService relativeService;
-
-    @PostMapping(value = "/debtor/relatives", consumes = {MediaType.APPLICATION_JSON_VALUE,
-            MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void createRelative(@RequestPart("relativeDto") RelativeDto relativeDto,
-                               @RequestPart("images") List<MultipartFile> images) {
-        relativeService.createRelative(relativeDto, images);
-    }
 
     @GetMapping("/debtor/relatives/{applicationId}")
     public List<GetRelativeDto> getRelatives(@Positive(message = APPLICATION_ID_MUST_BE_POSITIVE)

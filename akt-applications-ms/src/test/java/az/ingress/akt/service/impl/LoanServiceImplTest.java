@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.enums.Step;
-import az.ingress.akt.exception.ApplicationStepException;
 import az.ingress.akt.exception.NotFoundException;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
@@ -27,7 +26,9 @@ class LoanServiceImplTest {
     public static final String DUMMY_USERNAME = "username";
     public static final String DUMMY_CUSTOMER_FIN = "151fgf6";
     public static final long DUMMY_APPLICATION_ID = 1L;
-
+    public static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
+            String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
+                    DUMMY_USERNAME);
     @Mock
     private SecurityUtils securityUtils;
 
@@ -51,43 +52,16 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndNoAgentUsernameThenNotFoundException() {
-        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkLoanById(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class);
-    }
-
-    @Test
-    public void givenLoanThenApplicationStepException() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        loan = Loan.builder()
-                .id(DUMMY_APPLICATION_ID)
-                .agentUsername(DUMMY_USERNAME)
-                .customerFin(DUMMY_CUSTOMER_FIN)
-                .step(Step.CREATED)
-                .build();
-        when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME))
-                .thenReturn(Optional.of(loan));
-        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
-                .isInstanceOf(ApplicationStepException.class);
-    }
-
-    @Test
-    public void givenLoanThenApplicationStepIsOk() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME))
-                .thenReturn(Optional.of(loan));
-        loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID);
-        assertThat(loan.getStep()).isEqualTo(Step.FIRST_INFORMATIONS);
-        verify(loanRepository).findByIdAndAgentUsername(anyLong(), anyString());
-        verify(securityUtils).getCurrentUserLogin();
     }
 
     @Test
     public void givenLoanIdAndAgentUserNameThenLoanNotFoundException() {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkLoanById(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
-                .hasMessage(String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
-                        DUMMY_USERNAME));
+                .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -95,16 +69,8 @@ class LoanServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(
                 Optional.ofNullable(loan));
-        assertThat(loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID)).isEqualTo(loan);
-    }
-
-    @Test
-    public void givenIdAndAgentUserNameThenReturnLoan() {
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME)).thenReturn(
-                Optional.ofNullable(loan));
-        loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID);
-        verify(loanRepository).findByIdAndAgentUsername(anyLong(), anyString());
+        assertThat(loanService.checkLoanById(DUMMY_APPLICATION_ID)).isEqualTo(loan);
         verify(securityUtils).getCurrentUserLogin();
+        verify(loanRepository).findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME);
     }
 }

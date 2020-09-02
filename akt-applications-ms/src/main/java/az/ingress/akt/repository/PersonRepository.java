@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-    Optional<Person> findByFinCodeAndLoanId(String finCode, Long applicationId);
+    Optional<Person> findByLoanId(Long applicationId);
 
     Page<GetRelativeDto> findByLoanIdAndPersonTypeIsNot(Long applicationId, PersonType personType,
                                                         Pageable pageable);
