@@ -16,7 +16,7 @@ databaseChangeLog:
                   name: application_id
                   type: bigint
               - column:
-                  name: type
+                  name: person_type
                   type: varchar(255)
               - column:
                   name: fin_code

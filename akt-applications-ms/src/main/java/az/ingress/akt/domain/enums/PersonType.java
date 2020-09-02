@@ -1,5 +1,5 @@
 package az.ingress.akt.domain.enums;
 
-public enum Type {
+public enum PersonType {
     FATHER,MOTHER,SISTER,BROTHER,WIFE,SON,DAUGHTER,DEBTOR
 }

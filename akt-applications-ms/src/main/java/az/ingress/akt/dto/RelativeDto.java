@@ -1,6 +1,6 @@
 package az.ingress.akt.dto;
 
-import az.ingress.akt.domain.enums.Type;
+import az.ingress.akt.domain.enums.PersonType;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotBlank;
@@ -13,7 +13,7 @@ import lombok.Data;
 public class RelativeDto {
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    private PersonType personType;
 
     @NotBlank(message = "You should provide your full name")
     private String fullName;

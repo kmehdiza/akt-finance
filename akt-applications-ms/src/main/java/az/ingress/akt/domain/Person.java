@@ -1,6 +1,6 @@
 package az.ingress.akt.domain;
 
-import az.ingress.akt.domain.enums.Type;
+import az.ingress.akt.domain.enums.PersonType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -19,21 +19,25 @@ import lombok.Data;
 @Data
 @Builder
 @Table(name = Person.TABLE_NAME, indexes = {
-        @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true)
+        @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true),
+        @Index(columnList = Person.PERSON_TYPE_COLUMN,name = Person.PERSON_TYPE_INDEX,unique = true)
 })
 public class Person {
 
     public static final String TABLE_NAME = "person";
     public static final String FIN_CODE_COLUMN = "fin_code";
+    public static final String PERSON_TYPE_COLUMN = "fin_code";
     public static final String INDEX = "_index";
     public static final String FIN_CODE_INDEX = FIN_CODE_COLUMN + INDEX;
+    public static final String PERSON_TYPE_INDEX = PERSON_TYPE_COLUMN + INDEX;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    private Type type;
+    @Column(name = "person_type")
+    private PersonType personType;
 
     private String fullName;
 

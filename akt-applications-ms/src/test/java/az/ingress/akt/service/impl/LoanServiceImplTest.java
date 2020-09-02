@@ -51,7 +51,7 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndNoAgentUsernameThenNotFoundException() {
-        assertThatThrownBy(() -> loanService.getLoanInfo(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class);
     }
 
@@ -66,7 +66,7 @@ class LoanServiceImplTest {
                 .build();
         when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME))
                 .thenReturn(Optional.of(loan));
-        assertThatThrownBy(() -> loanService.getLoanInfo(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
                 .isInstanceOf(ApplicationStepException.class);
     }
 
@@ -75,7 +75,7 @@ class LoanServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME))
                 .thenReturn(Optional.of(loan));
-        loanService.getLoanInfo(DUMMY_APPLICATION_ID);
+        loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID);
         assertThat(loan.getStep()).isEqualTo(Step.FIRST_INFORMATIONS);
         verify(loanRepository).findByIdAndAgentUsername(anyLong(), anyString());
         verify(securityUtils).getCurrentUserLogin();
@@ -84,7 +84,7 @@ class LoanServiceImplTest {
     @Test
     public void givenLoanIdAndAgentUserNameThenLoanNotFoundException() {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        assertThatThrownBy(() -> loanService.getLoanInfo(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                         DUMMY_USERNAME));
@@ -95,7 +95,7 @@ class LoanServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(
                 Optional.ofNullable(loan));
-        assertThat(loanService.getLoanInfo(DUMMY_APPLICATION_ID)).isEqualTo(loan);
+        assertThat(loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID)).isEqualTo(loan);
     }
 
     @Test
@@ -103,7 +103,7 @@ class LoanServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME)).thenReturn(
                 Optional.ofNullable(loan));
-        loanService.getLoanInfo(DUMMY_APPLICATION_ID);
+        loanService.checkLoanByIdAndStep(DUMMY_APPLICATION_ID);
         verify(loanRepository).findByIdAndAgentUsername(anyLong(), anyString());
         verify(securityUtils).getCurrentUserLogin();
     }

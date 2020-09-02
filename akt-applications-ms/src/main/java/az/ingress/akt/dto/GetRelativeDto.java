@@ -1,6 +1,6 @@
 package az.ingress.akt.dto;
 
-import az.ingress.akt.domain.enums.Type;
+import az.ingress.akt.domain.enums.PersonType;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
 @Builder
 public class GetRelativeDto {
 
-    private Type type;
+    private PersonType personType;
 
     private String finCode;
 

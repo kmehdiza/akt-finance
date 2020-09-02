@@ -19,10 +19,15 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
 
     @Override
-    public Loan getLoanInfo(Long applicationId) {
+    public Loan checkLoanByIdAndStep(Long applicationId) {
         Loan loan = checkIfLoanExist(applicationId, getAgentUsername());
         checkLoanStep(loan);
         return loan;
+    }
+
+    @Override
+    public Loan checkLoanById(Long applicationId) {
+        return checkIfLoanExist(applicationId, getAgentUsername());
     }
 
     private Loan checkIfLoanExist(Long id, String agentUsername) {
