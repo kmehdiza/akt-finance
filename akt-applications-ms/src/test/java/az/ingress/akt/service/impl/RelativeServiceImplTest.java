@@ -71,10 +71,7 @@ public class RelativeServiceImplTest {
                 new MockMultipartFile(DUMMY_IMAGE_JPG, DUMMY_IMAGE_ORIGINAL_NAME, DUMMY_CONTENT_TYPE,
                         DUMMY_IMAGE_JPG.getBytes(DUMMY_CHARSET_NAME));
         images = Arrays.asList(mockImage, mockImage);
-
-        imagesUrl = images.stream()
-                .map(m -> m.toString())
-                .collect(Collectors.toList());
+        imagesUrl = getImageUrl();
         loan = Loan.builder()
                 .id(DUMMY_APPLICATION_ID)
                 .agentUsername(DUMMY_USERNAME)
@@ -87,7 +84,6 @@ public class RelativeServiceImplTest {
                 .type(Type.MOTHER)
                 .applicationId(DUMMY_APPLICATION_ID)
                 .build();
-
         person = Person.builder()
                 .id(DUMMY_APPLICATION_ID)
                 .fullName(relativeDto.getFullName())
@@ -96,12 +92,9 @@ public class RelativeServiceImplTest {
                 .idImage1(DUMMY_IMAGE_URL)
                 .idImage2(DUMMY_IMAGE_URL)
                 .build();
-        getRelativeDto = GetRelativeDto.builder()
-                .type(person.getType())
-                .finCode(person.getFinCode())
-                .fullName(person.getFullName())
-                .build();
+        getRelativeDto = getRelativoDtoBuild();
     }
+
 
     @Test
     public void givenRelativeByFinCodeAndLoanIdThenAlreadyExistException() {
@@ -150,4 +143,17 @@ public class RelativeServiceImplTest {
         assertThat(relativeService.getRelative(DUMMY_APPLICATION_ID)).isEqualTo(getRelativeDto);
     }
 
+    private GetRelativeDto getRelativoDtoBuild() {
+        return GetRelativeDto.builder()
+                .type(person.getType())
+                .finCode(person.getFinCode())
+                .fullName(person.getFullName())
+                .build();
+    }
+
+    private List<String> getImageUrl() {
+        return images.stream()
+                .map(m -> m.toString())
+                .collect(Collectors.toList());
+    }
 }
