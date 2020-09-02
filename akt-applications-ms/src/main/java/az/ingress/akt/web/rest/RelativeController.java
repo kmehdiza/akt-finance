@@ -1,4 +1,4 @@
-package az.ingress.akt.controller;
+package az.ingress.akt.web.rest;
 
 import az.ingress.akt.dto.GetRelativeDto;
 import az.ingress.akt.dto.RelativeDto;

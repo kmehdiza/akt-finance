@@ -13,9 +13,11 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "loan_applications")
+@Table(name = Loan.TABLE_NAME)
 @Builder
 public class Loan {
+
+    public static final String TABLE_NAME = "loan_application";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

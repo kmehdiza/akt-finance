@@ -1,10 +1,10 @@
 package az.ingress.akt.exception;
 
-public class UserNotFoundException extends RuntimeException {
+public class InvalidInputException extends RuntimeException {
 
     private static final long serialVersionUID = 58432132465811L;
 
-    public UserNotFoundException(String message) {
+    public InvalidInputException(String message) {
         super(message);
     }
 }

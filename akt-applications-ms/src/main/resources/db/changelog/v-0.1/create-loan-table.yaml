@@ -21,4 +21,4 @@ databaseChangeLog:
               - column:
                   name: customer_Fin
                   type: varchar(10)
-            tableName: loan_applications
+            tableName: loan_application
