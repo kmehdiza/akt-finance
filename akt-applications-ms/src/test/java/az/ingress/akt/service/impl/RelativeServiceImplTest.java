@@ -33,19 +33,19 @@ import org.springframework.data.domain.Pageable;
 @ExtendWith(MockitoExtension.class)
 public class RelativeServiceImplTest {
 
-    public static final String DUMMY_USERNAME = "username";
-    public static final String DUMMY_CUSTOMER_FIN = "151fgf6";
-    public static final String DUMMY_FULL_NAME = "James Smith";
-    public static final long DUMMY_APPLICATION_ID = 1L;
-    public static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
+    private static final String DUMMY_USERNAME = "username";
+    private static final String DUMMY_CUSTOMER_FIN = "151fgf6";
+    private static final String DUMMY_FULL_NAME = "James Smith";
+    private static final long DUMMY_APPLICATION_ID = 1L;
+    private static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                     DUMMY_USERNAME);
-    public static final String PERSON_NOT_FOUND_EXCEPTION_MESSAGE =
+    private static final String PERSON_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Person with applicationId: '%d' does not exist ", DUMMY_APPLICATION_ID);
-    public static final String DUMMY_IMAGE_URL = "image1.jpg";
-    public static final int PAGE = 0;
-    public static final int SIZE = 3;
-    public static final Pageable PAGEABLE = PageRequest.of(PAGE, SIZE);
+    private static final String DUMMY_IMAGE_URL = "image1.jpg";
+    private static final int PAGE = 0;
+    private static final int SIZE = 3;
+    private static final Pageable PAGEABLE = PageRequest.of(PAGE, SIZE);
     private static final PersonType DUMMY_PERSON_TYPE = PersonType.BROTHER;
 
     @Mock
@@ -77,8 +77,8 @@ public class RelativeServiceImplTest {
                 .finCode(DUMMY_CUSTOMER_FIN)
                 .personType(DUMMY_PERSON_TYPE)
                 .fullName(DUMMY_FULL_NAME)
-                .idImage1("image")
-                .idImage2("image")
+                .idImage1(DUMMY_IMAGE_URL)
+                .idImage2(DUMMY_IMAGE_URL)
                 .loan(loan)
                 .build();
         List<Person> personList = Arrays.asList(person, person);

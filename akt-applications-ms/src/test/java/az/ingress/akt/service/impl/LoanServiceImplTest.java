@@ -23,10 +23,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class LoanServiceImplTest {
 
-    public static final String DUMMY_USERNAME = "username";
-    public static final String DUMMY_CUSTOMER_FIN = "151fgf6";
-    public static final long DUMMY_APPLICATION_ID = 1L;
-    public static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
+    private static final String DUMMY_USERNAME = "username";
+    private static final String DUMMY_CUSTOMER_FIN = "151fgf6";
+    private static final long DUMMY_APPLICATION_ID = 1L;
+    private static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                     DUMMY_USERNAME);
     @Mock
