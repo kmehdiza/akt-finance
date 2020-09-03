@@ -17,12 +17,14 @@ import az.ingress.akt.service.LoanService;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -57,23 +59,19 @@ public class RelativeServiceImplTest {
 
     private Person person;
     private Loan loan;
-    private final GetRelativeDto getRelativeDto = GetRelativeDto.builder()
-            .personType(DUMMY_PERSON_TYPE)
-            .finCode(DUMMY_CUSTOMER_FIN)
-            .fullName(DUMMY_FULL_NAME)
-            .build();
-    private Page<GetRelativeDto> relativePage;
+    private List<GetRelativeDto> relativeDtoList;
+    private Page<Person> personPage;
+    private ModelMapper modelMapper;
 
     @BeforeEach
     public void setUp() throws Exception {
-        List<GetRelativeDto> relativeList = Arrays.asList(getRelativeDto, getRelativeDto);
+        modelMapper = new ModelMapper();
         loan = Loan.builder()
                 .id(DUMMY_APPLICATION_ID)
                 .agentUsername(DUMMY_USERNAME)
                 .customerFin(DUMMY_CUSTOMER_FIN)
                 .step(Step.FIRST_INFORMATIONS)
                 .build();
-        relativePage = new PageImpl<GetRelativeDto>(relativeList, PAGEABLE, 2);
         person = Person.builder()
                 .id(DUMMY_APPLICATION_ID)
                 .finCode(DUMMY_CUSTOMER_FIN)
@@ -83,6 +81,11 @@ public class RelativeServiceImplTest {
                 .idImage2("image")
                 .loan(loan)
                 .build();
+        List<Person> personList = Arrays.asList(person, person);
+        personPage = new PageImpl<Person>(personList, PAGEABLE, 2);
+        relativeDtoList = personList.stream()
+                .map(p -> modelMapper.map(p, GetRelativeDto.class))
+                .collect(Collectors.toList());
     }
 
     @Test
@@ -103,10 +106,10 @@ public class RelativeServiceImplTest {
         when(loanService.checkLoanById(DUMMY_APPLICATION_ID)).thenReturn(loan);
         when(personRepository.findByLoanId(DUMMY_APPLICATION_ID)).thenReturn(Optional.of(person));
         when(personRepository.findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, DUMMY_PERSON_TYPE, PAGEABLE))
-                .thenReturn(relativePage);
+                .thenReturn(personPage);
 
         assertThat(relativeService.getRelatives(DUMMY_APPLICATION_ID, DUMMY_PERSON_TYPE, PAGE, SIZE))
-                .isEqualTo(relativePage);
+                .isEqualTo(relativeDtoList);
 
         verify(loanService).checkLoanById(DUMMY_APPLICATION_ID);
         verify(personRepository).findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, DUMMY_PERSON_TYPE, PAGEABLE);

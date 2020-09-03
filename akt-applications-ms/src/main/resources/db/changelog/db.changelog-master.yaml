@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/v-0.1/create-loan-table.yaml
   - include:
       file: db/changelog/v-0.1/create-person-table.yaml
+  - include:
+      file: db/changelog/v-0.1/insert-to-loan.yaml
+  - include:
+      file: db/changelog/v-0.1/insert-to-person.yaml
