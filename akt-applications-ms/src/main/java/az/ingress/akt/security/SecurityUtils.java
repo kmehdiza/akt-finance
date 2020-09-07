@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  * Utility class for Spring Security.
  */
 @Component
-public final class SecurityUtils {
+public class SecurityUtils {
 
     /**
      * Get the login of the current user.

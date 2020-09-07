@@ -16,6 +16,12 @@ databaseChangeLog:
                   name: step
                   type: varchar(50)
               - column:
+                  name: status
+                  type: varchar(50)
+              - column:
+                  name: create_date
+                  type: datetime
+              - column:
                   name: agent_username
                   type: varchar(255)
             tableName: loan_application
