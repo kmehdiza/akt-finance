@@ -1,6 +1,8 @@
 package az.ingress.akt.service.impl;
 
 import az.ingress.akt.client.UserManagementClient;
+import az.ingress.akt.domain.Loan;
+import az.ingress.akt.domain.enums.Step;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.ApplicationService;
 import az.ingress.akt.web.rest.errors.UserIsNotActiveException;
@@ -8,6 +10,7 @@ import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +27,11 @@ public class ApplicationServiceImpl implements ApplicationService {
         if (!userManagementClient.isUserActive(username)) {
             throw new UserIsNotActiveException();
         }
-        return username;
+        Loan loan = Loan.builder()
+                .agentUsername(username)
+                .step(Step.CREATED)
+                .build();
+        return String.format("{applicationId:'%d'}",loan.getId());
     }
 
 }
