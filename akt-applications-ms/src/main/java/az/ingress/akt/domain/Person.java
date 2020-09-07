@@ -15,6 +15,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Data
@@ -27,7 +31,7 @@ public class Person {
 
     public static final String TABLE_NAME = "person";
     public static final String FIN_CODE_COLUMN = "fin_code";
-    public static final String PERSON_TYPE_COLUMN = "fin_code";
+    public static final String PERSON_TYPE_COLUMN = "person_type";
     public static final String INDEX = "_index";
     public static final String FIN_CODE_INDEX = FIN_CODE_COLUMN + INDEX;
     public static final String PERSON_TYPE_INDEX = PERSON_TYPE_COLUMN + INDEX;
@@ -51,6 +55,8 @@ public class Person {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(CascadeType.SAVE_UPDATE)
     private Loan loan;
 
     private String signatureImage;

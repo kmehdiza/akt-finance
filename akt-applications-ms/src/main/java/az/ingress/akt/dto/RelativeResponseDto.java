@@ -4,7 +4,7 @@ import az.ingress.akt.domain.enums.PersonType;
 import lombok.Data;
 
 @Data
-public class GetRelativeDto {
+public class RelativeResponseDto {
 
     private PersonType personType;
 

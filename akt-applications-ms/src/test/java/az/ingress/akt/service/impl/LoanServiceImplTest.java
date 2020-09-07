@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -29,6 +30,7 @@ class LoanServiceImplTest {
     private static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                     DUMMY_USERNAME);
+    public static final String USERNAME_NOT_FOUND_EXCEPTION_MESSAGE = "Agent username not found";
     @Mock
     private SecurityUtils securityUtils;
 
@@ -52,14 +54,15 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndNoAgentUsernameThenNotFoundException() {
-        assertThatThrownBy(() -> loanService.checkLoanById(DUMMY_APPLICATION_ID))
-                .isInstanceOf(NotFoundException.class);
+        assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessage(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     @Test
     public void givenLoanIdAndAgentUserNameThenLoanNotFoundException() {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        assertThatThrownBy(() -> loanService.checkLoanById(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
     }
@@ -69,8 +72,12 @@ class LoanServiceImplTest {
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(
                 Optional.ofNullable(loan));
-        assertThat(loanService.checkLoanById(DUMMY_APPLICATION_ID)).isEqualTo(loan);
-        verify(securityUtils).getCurrentUserLogin();
-        verify(loanRepository).findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME);
+
+        loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID);
+
+        assertThat(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).isEqualTo(loan);
+
+        verify(securityUtils, times(2)).getCurrentUserLogin();
+        verify(loanRepository, times(2)).findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME);
     }
 }

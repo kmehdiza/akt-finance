@@ -10,6 +10,7 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: loan_application_pkey
+                    nullable: false
                   name: id
                   type: bigint
               - column:

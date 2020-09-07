@@ -17,14 +17,11 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
 
     @Override
-    public Loan checkLoanById(Long applicationId) {
-        return checkIfLoanExist(applicationId, getAgentUsername());
-    }
-
-    private Loan checkIfLoanExist(Long id, String agentUsername) {
-        return loanRepository.findByIdAndAgentUsername(id, agentUsername)
+    public Loan checkByIdAndReturnLoan(Long applicationId) {
+        return loanRepository.findByIdAndAgentUsername(applicationId, getAgentUsername())
                 .orElseThrow(() -> new NotFoundException(
-                        String.format("Loan with id: '%d' and username: '%s' does not exist ", id, agentUsername)));
+                        String.format("Loan with id: '%d' and username: '%s' does not exist ", applicationId,
+                                getAgentUsername())));
     }
 
     private String getAgentUsername() {
