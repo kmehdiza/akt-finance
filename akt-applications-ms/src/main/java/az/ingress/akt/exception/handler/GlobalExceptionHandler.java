@@ -1,10 +1,9 @@
 package az.ingress.akt.exception.handler;
 
-import az.ingress.akt.exception.AlreadyExistException;
-import az.ingress.akt.exception.ApplicationStepException;
-import az.ingress.akt.exception.InvalidInputException;
 import az.ingress.akt.exception.NotFoundException;
 import java.util.Map;
+import java.util.stream.Collectors;
+import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -16,54 +15,45 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @Slf4j
 @ControllerAdvice
 @RestController
 public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
-    @ExceptionHandler(ApplicationStepException.class)
-    public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(ApplicationStepException ex,
-                                                                                        WebRequest request) {
-        return ofType(request, HttpStatus.NOT_FOUND);
-    }
-
-
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(NotFoundException ex,
                                                                                         WebRequest request) {
-        return ofType(request, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(InvalidInputException.class)
-    public final ResponseEntity<Map<String, Object>> handleInvalidInputException(InvalidInputException ex,
-                                                                                 WebRequest request) {
-        return ofType(request, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(AlreadyExistException.class)
-    public final ResponseEntity<Map<String, Object>> handleAlreadyExistException(AlreadyExistException ex,
-                                                                                 WebRequest request) {
-        return ofType(request, HttpStatus.BAD_REQUEST);
+        return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public final ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException ex,
                                                                                         WebRequest request) {
-        return ofType(request, HttpStatus.BAD_REQUEST);
+        return ofType(request, HttpStatus.BAD_REQUEST, getConstraintViolationExceptionMessage(ex));
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handleIllegalArgumentException(IllegalArgumentException ex,
-                                                                              WebRequest request) {
-        return ofType(request, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public final ResponseEntity<Map<String, Object>> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException ex,
+            WebRequest request) {
+        return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    private ResponseEntity<Map<String, Object>> ofType(WebRequest request, HttpStatus status) {
+    private ResponseEntity<Map<String, Object>> ofType(WebRequest request, HttpStatus status, String message) {
         Map<String, Object> attributes = getErrorAttributes(request, ErrorAttributeOptions.defaults());
         attributes.put("status", status.value());
         attributes.put("error", status.getReasonPhrase());
+        attributes.put("message", message);
         attributes.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
         return new ResponseEntity<>(attributes, status);
+    }
+
+    private String getConstraintViolationExceptionMessage(ConstraintViolationException ex) {
+        return ex.getConstraintViolations()
+                .stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.toList()).get(0);
     }
 }
