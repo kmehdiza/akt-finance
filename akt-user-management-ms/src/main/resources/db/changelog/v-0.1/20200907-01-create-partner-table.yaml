@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-01
+      author: aslanov
+      changes:
+        - createTable:
+            tableName: partner
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: partner_pk
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: partner_name_uindex
+              - column:
+                  name: tin
+                  type: VARCHAR(14)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: partner_tin_uindex
+              - column:
+                  name: contact_person
+                  type: VARCHAR(255)
+              - column:
+                  name: mobile
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+              - column:
+                  name: mkr_address
+                  type: VARCHAR(150)
+              - column:
+                  name: status
+                  type: VARCHAR(30)
+                  defaultValue: ACTIVE
+              - column:
+                  name: create_date
+                  type: datetime
