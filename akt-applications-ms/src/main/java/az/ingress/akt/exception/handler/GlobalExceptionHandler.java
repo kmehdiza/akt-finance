@@ -23,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
     @ExceptionHandler(NotFoundException.class)
-    public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(NotFoundException ex,
+    public final ResponseEntity<Map<String, Object>> handleNotFoundException(NotFoundException ex,
             WebRequest request) {
         return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
     }

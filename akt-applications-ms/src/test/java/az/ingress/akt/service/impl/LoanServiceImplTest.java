@@ -54,36 +54,40 @@ class LoanServiceImplTest {
     }
 
     @Test
-    public void givenLoanIdAndNoAgentUsernameThenNotFoundException() {
+    public void givenLoanIdAndNoAgentUsernameWhenLoanFindByIdExpectNotFoundException() {
+        //Arrange
+        when(securityUtils.getCurrentUserLogin())
+                .thenThrow(new NotFoundException(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE));
+
         //Act & Assert
-        assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.findById(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     @Test
-    public void givenLoanIdAndAgentUserNameThenLoanNotFoundException() {
+    public void givenLoanIdAndAgentUserNameWhenLoanFindByIdExpectLoanNotFoundException() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
 
         //Act & Assert
-        assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
+        assertThatThrownBy(() -> loanService.findById(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     @Test
-    public void givenLoanIdAndAgentUserNameThenOk() {
+    public void givenLoanIdAndAgentUserNameWhenFindByIdThenOk() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(
                 Optional.ofNullable(loan));
 
         //Act
-        loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID);
+        loanService.findById(DUMMY_APPLICATION_ID);
 
         //Assert
-        assertThat(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).isEqualTo(loan);
+        assertThat(loanService.findById(DUMMY_APPLICATION_ID)).isEqualTo(loan);
         verify(securityUtils, times(2)).getCurrentUserLogin();
         verify(loanRepository, times(2)).findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME);
     }

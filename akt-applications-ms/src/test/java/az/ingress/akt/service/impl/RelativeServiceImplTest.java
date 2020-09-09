@@ -78,7 +78,7 @@ public class RelativeServiceImplTest {
     @Test
     public void givenApplicationIdThenApplicationNotExist() {
         //Arrange
-        when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenThrow(new NotFoundException(
+        when(loanService.findById(DUMMY_APPLICATION_ID)).thenThrow(new NotFoundException(
                 LOAN_NOT_FOUND_EXCEPTION_MESSAGE));
 
         //Act & Assert
@@ -86,13 +86,13 @@ public class RelativeServiceImplTest {
                 () -> relativeService.getRelatives(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
-        verify(loanService).checkByIdAndReturnLoan(DUMMY_APPLICATION_ID);
+        verify(loanService).findById(DUMMY_APPLICATION_ID);
     }
 
     @Test
     public void givenApplicationIdThenReturnRelativesList() {
         //Arrange
-        when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenReturn(loan);
+        when(loanService.findById(DUMMY_APPLICATION_ID)).thenReturn(loan);
         when(personRepository.findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, PersonType.DEBTOR))
                 .thenReturn(personList);
 
@@ -109,7 +109,7 @@ public class RelativeServiceImplTest {
         //Arrange
         List personListLocal = new ArrayList();
         relativeResponseDtoList = personListToRelativeResponseDtoList(personListLocal);
-        when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenReturn(loan);
+        when(loanService.findById(DUMMY_APPLICATION_ID)).thenReturn(loan);
         when(personRepository.findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, PersonType.DEBTOR))
                 .thenReturn(personListLocal);
 

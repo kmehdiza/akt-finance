@@ -4,6 +4,6 @@ import az.ingress.akt.domain.Loan;
 
 public interface LoanService {
 
-    Loan checkByIdAndReturnLoan(Long applicationId);
+    Loan findById(Long applicationId);
 
 }

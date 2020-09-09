@@ -17,7 +17,7 @@ public class LoanServiceImpl implements LoanService {
     private final LoanRepository loanRepository;
 
     @Override
-    public Loan checkByIdAndReturnLoan(Long applicationId) {
+    public Loan findById(Long applicationId) {
         return loanRepository.findByIdAndAgentUsername(applicationId, getAgentUsername())
                 .orElseThrow(() -> new NotFoundException(
                         String.format("Loan with id: '%d' and username: '%s' does not exist ", applicationId,

@@ -46,14 +46,17 @@ class GetRelativeControllerTest {
     private static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                     DUMMY_USERNAME);
+
     @MockBean
     TokenProvider tokenProvider;
+
     @MockBean
     private RelativeService relativeService;
+
     @Autowired
     private MockMvc mockMvc;
-    private List<RelativeResponseDto> relativeResponseDtoList;
 
+    private List<RelativeResponseDto> relativeResponseDtoList;
 
     @BeforeEach
     void setUp() {
@@ -80,7 +83,7 @@ class GetRelativeControllerTest {
     }
 
     @Test
-    public void givenNegativeApplicationIdExpectConstraintViolationErrorMessage() throws Exception {
+    public void givenNegativeApplicationIdWhenGettingRelativesExpectConstraintViolationErrorMessage() throws Exception {
         long id = -1L;
         mockMvc.perform(get(GET_RELATIVES_PATH, id)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -93,7 +96,8 @@ class GetRelativeControllerTest {
     }
 
     @Test
-    public void givenWrongTypeMethodArgumentExpectMethodArgumentTypeMismatchErrorMessage() throws Exception {
+    public void givenWrongTypeMethodArgumentWhenGettingRelativesExpectMethodArgumentTypeMismatchErrorMessage()
+            throws Exception {
         String stringId = "aaa";
         mockMvc.perform(get(GET_RELATIVES_PATH, stringId)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -106,7 +110,7 @@ class GetRelativeControllerTest {
     }
 
     @Test
-    public void givenApplicationIdExpectLoanNotFoundErrorMessage() throws Exception {
+    public void givenApplicationIdWhenGettingRelativesExpectLoanNotFoundErrorMessage() throws Exception {
         when(relativeService.getRelatives(DUMMY_APPLICATION_ID)).thenThrow(new NotFoundException(
                 LOAN_NOT_FOUND_EXCEPTION_MESSAGE));
 
@@ -121,7 +125,7 @@ class GetRelativeControllerTest {
     }
 
     @Test
-    public void givenAccountWithInvalidIdExpectErrorMessage() throws Exception {
+    public void givenApplicationIdWhenGettingRelativesExpectRelativeList() throws Exception {
         when(relativeService.getRelatives(DUMMY_APPLICATION_ID)).thenReturn(relativeResponseDtoList);
 
         assertThat(relativeService.getRelatives(DUMMY_APPLICATION_ID)).hasSize(2);

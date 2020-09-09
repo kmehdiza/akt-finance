@@ -22,7 +22,7 @@ public class RelativeServiceImpl implements RelativeService {
 
     @Override
     public List<RelativeResponseDto> getRelatives(long applicationId) {
-        loanService.checkByIdAndReturnLoan(applicationId);
+        loanService.findById(applicationId);
         List<Person> personList =
                 personRepository.findByLoanIdAndPersonTypeIsNot(applicationId, PersonType.DEBTOR);
         return personListToRelativeResponseDtoList(personList);
