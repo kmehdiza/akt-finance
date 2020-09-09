@@ -5,8 +5,9 @@ databaseChangeLog:
       changes:
         - addForeignKeyConstraint:
             baseTableName: user
-            baseColumnNames: partner_id
+            baseColumnNames: partner
             constraintName: user_partner_fk
             referencedTableName: partner
-            referencedColumnNames: id
+            referencedColumnNames: tin
             onDelete: CASCADE
+            onUpdate: RESTRICT

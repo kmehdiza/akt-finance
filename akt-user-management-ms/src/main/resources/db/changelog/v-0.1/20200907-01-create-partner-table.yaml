@@ -7,9 +7,8 @@ databaseChangeLog:
             tableName: partner
             columns:
               - column:
-                  name: id
-                  type: bigint
-                  autoIncrement: true
+                  name: tin
+                  type: VARCHAR(14)
                   constraints:
                     primaryKey: true
                     primaryKeyName: partner_pk
@@ -22,13 +21,6 @@ databaseChangeLog:
                     unique: true
                     uniqueConstraintName: partner_name_uindex
               - column:
-                  name: tin
-                  type: VARCHAR(14)
-                  constraints:
-                    nullable: false
-                    unique: true
-                    uniqueConstraintName: partner_tin_uindex
-              - column:
                   name: contact_person
                   type: VARCHAR(255)
               - column:
@@ -37,9 +29,6 @@ databaseChangeLog:
               - column:
                   name: email
                   type: VARCHAR(255)
-              - column:
-                  name: mkr_address
-                  type: VARCHAR(150)
               - column:
                   name: status
                   type: VARCHAR(30)

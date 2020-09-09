@@ -31,5 +31,5 @@ databaseChangeLog:
                   name: create_date
                   valueDate: now()
               - column:
-                  name: partner_id
-                  valueComputed: "(select id from partner where name = 'AKT')"
+                  name: partner
+                  valueComputed: "2006235061"

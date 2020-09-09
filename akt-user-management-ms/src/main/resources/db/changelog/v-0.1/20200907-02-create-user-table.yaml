@@ -53,7 +53,7 @@ databaseChangeLog:
                   name: create_date
                   type: datetime
               - column:
-                  name: partner_id
-                  type: bigint
+                  name: partner
+                  type: VARCHAR(14)
                   constraints:
                     nullable: false
