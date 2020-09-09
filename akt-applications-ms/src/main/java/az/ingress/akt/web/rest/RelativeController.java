@@ -20,8 +20,8 @@ public class RelativeController {
     private final RelativeService relativeService;
 
     @GetMapping("/debtor/relatives/{applicationId}")
-    public List<RelativeResponseDto> getRelatives(@Positive(message = APPLICATION_ID_MUST_BE_POSITIVE)
-    @PathVariable("applicationId") Long applicationId) {
+    public List<RelativeResponseDto> getRelatives(
+            @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("applicationId") Long applicationId) {
         return relativeService.getRelatives(applicationId);
     }
 }
