@@ -13,8 +13,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = Loan.TABLE_NAME)
 @Builder
+@Table(name = Loan.TABLE_NAME)
 public class Loan {
 
     public static final String TABLE_NAME = "loan_application";

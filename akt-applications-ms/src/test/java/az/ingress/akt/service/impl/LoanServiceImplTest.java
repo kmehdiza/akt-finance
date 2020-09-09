@@ -31,6 +31,7 @@ class LoanServiceImplTest {
             String.format("Loan with id: '%d' and username: '%s' does not exist ", DUMMY_APPLICATION_ID,
                     DUMMY_USERNAME);
     public static final String USERNAME_NOT_FOUND_EXCEPTION_MESSAGE = "Agent username not found";
+
     @Mock
     private SecurityUtils securityUtils;
 
@@ -54,6 +55,7 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndNoAgentUsernameThenNotFoundException() {
+        //Act & Assert
         assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(USERNAME_NOT_FOUND_EXCEPTION_MESSAGE);
@@ -61,7 +63,10 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndAgentUserNameThenLoanNotFoundException() {
+        //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
+
+        //Act & Assert
         assertThatThrownBy(() -> loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
@@ -69,14 +74,16 @@ class LoanServiceImplTest {
 
     @Test
     public void givenLoanIdAndAgentUserNameThenOk() {
+        //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(anyLong(), anyString())).thenReturn(
                 Optional.ofNullable(loan));
 
+        //Act
         loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID);
 
+        //Assert
         assertThat(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).isEqualTo(loan);
-
         verify(securityUtils, times(2)).getCurrentUserLogin();
         verify(loanRepository, times(2)).findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME);
     }

@@ -77,39 +77,46 @@ public class RelativeServiceImplTest {
 
     @Test
     public void givenApplicationIdThenApplicationNotExist() {
+        //Arrange
         when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenThrow(new NotFoundException(
                 LOAN_NOT_FOUND_EXCEPTION_MESSAGE));
 
+        //Act & Assert
         assertThatThrownBy(
                 () -> relativeService.getRelatives(DUMMY_APPLICATION_ID))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage(LOAN_NOT_FOUND_EXCEPTION_MESSAGE);
-
         verify(loanService).checkByIdAndReturnLoan(DUMMY_APPLICATION_ID);
     }
 
     @Test
     public void givenApplicationIdThenReturnRelativesList() {
+        //Arrange
         when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenReturn(loan);
         when(personRepository.findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, PersonType.DEBTOR))
                 .thenReturn(personList);
 
+        //Act
         relativeService.getRelatives(DUMMY_APPLICATION_ID);
 
+        //Assert
         assertThat(relativeService.getRelatives(DUMMY_APPLICATION_ID))
                 .isEqualTo(relativeResponseDtoList);
     }
 
     @Test
     public void givenApplicationIdThenReturnEmptyRelativesList() {
-        personList = new ArrayList<>();
-        relativeResponseDtoList = personListToRelativeResponseDtoList(personList);
+        //Arrange
+        List personListLocal = new ArrayList();
+        relativeResponseDtoList = personListToRelativeResponseDtoList(personListLocal);
         when(loanService.checkByIdAndReturnLoan(DUMMY_APPLICATION_ID)).thenReturn(loan);
         when(personRepository.findByLoanIdAndPersonTypeIsNot(DUMMY_APPLICATION_ID, PersonType.DEBTOR))
-                .thenReturn(personList);
+                .thenReturn(personListLocal);
 
+        //Act
         relativeService.getRelatives(DUMMY_APPLICATION_ID);
 
+        //Assert
         assertThat(relativeService.getRelatives(DUMMY_APPLICATION_ID))
                 .isEqualTo(relativeResponseDtoList);
     }

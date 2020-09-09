@@ -12,8 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class RelativeServiceImpl implements RelativeService {
 
     private final PersonRepository personRepository;
