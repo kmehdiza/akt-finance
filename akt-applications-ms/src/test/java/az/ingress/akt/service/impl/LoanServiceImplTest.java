@@ -66,9 +66,11 @@ class LoanServiceImplTest {
     }
 
     @Test
-    public void givenLoanIdAndAgentUserNameWhenLoanFindByIdExpectLoanNotFoundException() {
+    public void givenLoanWithIdNotPresentWhenLoanFindByIdAndAgentUsernameExpectLoanNotFoundException() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
+        when(loanRepository.findByIdAndAgentUsername(DUMMY_APPLICATION_ID, DUMMY_USERNAME))
+                .thenReturn(Optional.empty());
 
         //Act & Assert
         assertThatThrownBy(() -> loanService.findById(DUMMY_APPLICATION_ID))
