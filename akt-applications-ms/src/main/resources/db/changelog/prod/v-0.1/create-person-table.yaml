@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-person-table
+      author: tural
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: persons_pkey
+                    nullable: false
+                  name: id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: application_id
+                  type: bigint
+              - column:
+                  constraints:
+                    nullable: false
+                  name: person_type
+                  type: varchar(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: fin_code
+                  type: varchar(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: full_name
+                  type: varchar(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: id_image1
+                  type: varchar(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: id_image2
+                  type: varchar(255)
+              - column:
+                  name: signature_image
+                  type: varchar(255)
+            tableName: person
