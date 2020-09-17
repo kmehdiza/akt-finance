@@ -1,9 +1,9 @@
 package az.ingress.user.management.service.impl;
 
+import az.ingress.common.security.AuthoritiesConstants;
 import az.ingress.user.management.domain.Authority;
 import az.ingress.user.management.domain.User;
 import az.ingress.user.management.repository.UserRepository;
-import az.ingress.user.management.security.AuthoritiesConstants;
 import az.ingress.user.management.service.UserService;
 import az.ingress.user.management.web.rest.errors.UsernameAlreadyUsedException;
 import az.ingress.user.management.web.rest.vm.ManagedUserVm;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
                 .ifPresent(user -> {
                     throw new UsernameAlreadyUsedException();
                 });
-        User user = createUserEntityObject(userVm, createAuthorities(AuthoritiesConstants.USER));
+        User user = createUserEntityObject(userVm, createAuthorities(AuthoritiesConstants.AGENT));
         userRepository.save(user);
     }
 

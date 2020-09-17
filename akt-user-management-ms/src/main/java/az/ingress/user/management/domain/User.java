@@ -1,5 +1,6 @@
 package az.ingress.user.management.domain;
 
+import az.ingress.user.management.domain.enumeration.ProfileStatus;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,13 +8,18 @@ import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -33,6 +39,32 @@ public class User {
     @JsonIgnore
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "surname")
+    private String surname;
+
+    @Column(name = "user_description")
+    private String userDescription;
+
+    @Column(name = "phone")
+    private String phone;
+
+    @Column(name = "email", nullable = false, unique = true)
+    private String email;
+
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private ProfileStatus status;
+
+    @Column(name = "create_date", updatable = false)
+    private LocalDateTime createDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "partner", referencedColumnName = "tin", nullable = false)
+    private Partner partner;
 
     @JsonIgnore
     @ManyToMany

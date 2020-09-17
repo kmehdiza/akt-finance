@@ -1,7 +1,10 @@
 package az.ingress.user.management.security;
 
+import az.ingress.common.security.CustomSpringSecurityUser;
 import az.ingress.user.management.domain.User;
+import az.ingress.user.management.domain.enumeration.ProfileStatus;
 import az.ingress.user.management.repository.UserRepository;
+import az.ingress.user.management.web.rest.errors.UserIsNotActiveException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +22,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DomainUserDetailsService implements UserDetailsService {
 
+    private static final String IS_NOT_ACTIVE_MESSAGE = "User is not active!";
+
     private final UserRepository userRepository;
 
     public DomainUserDetailsService(UserRepository userRepository) {
@@ -32,21 +37,26 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.info("Authenticating {}", username);
 
         String lowercaseUsername = username.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOneWithAuthoritiesByUsername(lowercaseUsername)
+        return userRepository.findOneWithAuthoritiesAndPartnerByUsername(lowercaseUsername)
                 .map(this::createSpringSecurityUser)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User " + lowercaseUsername + " was not found in the database"));
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(User user) {
-        /*if (!user.getActivated()) {
-            throw new UserNotActivatedException("User " + lowercaseUsername + " was not activated");
-        }*/
+    private CustomSpringSecurityUser createSpringSecurityUser(User user) {
+        checkUserProfileStatus(user);
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getName()))
                 .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+        return new CustomSpringSecurityUser(user.getUsername(),
                 user.getPassword(),
-                grantedAuthorities);
+                grantedAuthorities,
+                user.getPartner().getTin());
+    }
+
+    private void checkUserProfileStatus(User user) throws UserIsNotActiveException {
+        if (user.getStatus() != ProfileStatus.ACTIVE) {
+            throw new UserIsNotActiveException(IS_NOT_ACTIVE_MESSAGE);
+        }
     }
 }
