@@ -5,6 +5,10 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import java.security.Key;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -13,11 +17,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.security.Key;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Slf4j
 @RequiredArgsConstructor
 public class TokenUtils implements InitializingBean {
@@ -25,9 +24,9 @@ public class TokenUtils implements InitializingBean {
     protected static final String AUTHORITIES_KEY = "auth";
     protected static final String PARTNER_KEY = "tin";
 
-    private Key key;
-
     private final String secret;
+
+    private Key key;
 
     @Override
     public void afterPropertiesSet() throws Exception {

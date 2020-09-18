@@ -1,5 +1,6 @@
 package az.ingress.user.management.web.rest.errors;
 
+import java.util.Map;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -11,15 +12,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 
-import java.util.Map;
-
 @RestController
 @RestControllerAdvice
 public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<Map<String, Object>> handleUsernameNotFound(AuthenticationException ex,
-                                                                      WebRequest request) {
+            WebRequest request) {
         return ofType(request, HttpStatus.UNAUTHORIZED, ex.getMessage());
     }
 
