@@ -1,0 +1,37 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-05
+      author: aslanov
+      changes:
+        - createTable:
+            tableName: user_authority
+            columns:
+              - column:
+                  name: user_id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_authority_pk
+                    nullable: false
+              - column:
+                  name: authority_name
+                  type: VARCHAR(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: user_authority_pk
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: user_authority
+            baseColumnNames: user_id
+            constraintName: user_authority_user_fk
+            referencedTableName: user
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableName: user_authority
+            baseColumnNames: authority_name
+            constraintName: user_authority_authority_fk
+            referencedTableName: authority
+            referencedColumnNames: name
+            onDelete: RESTRICT
+            onUpdate: CASCADE

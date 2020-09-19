@@ -1,0 +1,26 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-06
+      author: aslanov
+      changes:
+        - insert:
+            tableName: partner
+            columns:
+              - column:
+                  name: name
+                  value: 'AKT'
+              - column:
+                  name: tin
+                  value: '2006235061'
+              - column:
+                  name: contact_person
+                  value: 'Elchin Aghalarov'
+              - column:
+                  name: mobile
+                  value: '+99451'
+              - column:
+                  name: email
+                  value: 'elchinaghalarov@gmail.com'
+              - column:
+                  name: creation_date
+                  valueComputed: now()

@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-04
+      author: aslanov
+      changes:
+        - createTable:
+            tableName: authority
+            columns:
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: authority_pk
+                    nullable: false

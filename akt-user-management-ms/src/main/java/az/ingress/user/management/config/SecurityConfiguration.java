@@ -1,5 +1,6 @@
 package az.ingress.user.management.config;
 
+import az.ingress.common.security.SecurityUtils;
 import az.ingress.user.management.security.jwt.JwtConfigurer;
 import az.ingress.user.management.security.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityUtils securityUtils() {
+        return new SecurityUtils();
     }
 
     @Override
