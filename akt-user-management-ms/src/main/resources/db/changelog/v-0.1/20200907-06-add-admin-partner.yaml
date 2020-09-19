@@ -22,5 +22,5 @@ databaseChangeLog:
                   name: email
                   value: 'elchinaghalarov@gmail.com'
               - column:
-                  name: create_date
+                  name: creation_date
                   valueComputed: now()

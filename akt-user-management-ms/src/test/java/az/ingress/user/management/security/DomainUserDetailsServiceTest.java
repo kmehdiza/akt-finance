@@ -52,9 +52,11 @@ class DomainUserDetailsServiceTest {
 
     @Test
     void givenNotExistedUsername_WhenAuthenticate_ThenThrowUserNotFoundException() {
+        //Arrange
         when(userRepository.findOneWithAuthoritiesAndPartnerByUsername(USERNAME))
                 .thenReturn(Optional.empty());
 
+        //Assert and Act
         assertThatExceptionOfType(UsernameNotFoundException.class)
                 .isThrownBy(() -> userDetailsService.loadUserByUsername(USERNAME));
 
@@ -64,10 +66,12 @@ class DomainUserDetailsServiceTest {
 
     @Test
     void givenNotActiveUsername_WhenAuthenticate_ThenThrowUserIsNotActiveException() {
+        //Arrange
         user.setStatus(ProfileStatus.BLOCKED);
         when(userRepository.findOneWithAuthoritiesAndPartnerByUsername(USERNAME))
                 .thenReturn(Optional.of(user));
 
+        //Assert and Act
         assertThatExceptionOfType(UserIsNotActiveException.class)
                 .isThrownBy(() -> userDetailsService.loadUserByUsername(USERNAME));
 
@@ -77,11 +81,15 @@ class DomainUserDetailsServiceTest {
 
     @Test
     void givenActiveUsername_WhenAuthenticate_ThenReturnsUserDetails() {
+        //Arrange
         user.setStatus(ProfileStatus.ACTIVE);
         when(userRepository.findOneWithAuthoritiesAndPartnerByUsername(USERNAME))
                 .thenReturn(Optional.of(user));
 
+        //Act
         UserDetails userDetails = userDetailsService.loadUserByUsername(USERNAME);
+
+        //Assert
         assertThat(userDetails).isNotNull();
         assertThat(userDetails.getUsername()).isEqualTo(USERNAME);
         assertThat(userDetails.getAuthorities())

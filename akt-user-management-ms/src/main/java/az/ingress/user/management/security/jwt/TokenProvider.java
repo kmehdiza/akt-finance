@@ -13,6 +13,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.stream.Collectors;
 
@@ -21,10 +23,6 @@ import java.util.stream.Collectors;
 public class TokenProvider extends TokenUtils {
 
     private Key key;
-
-    private long tokenValidityInMilliseconds;
-
-    private long tokenValidityInMillisecondsForRememberMe;
 
     private final ApplicationProperties applicationProperties;
 
@@ -39,10 +37,6 @@ public class TokenProvider extends TokenUtils {
         String secret = applicationProperties.getSecurity().getSecret();
         keyBytes = Decoders.BASE64.decode(secret);
         this.key = Keys.hmacShaKeyFor(keyBytes);
-        this.tokenValidityInMilliseconds =
-                applicationProperties.getSecurity().getTokenValidityInSeconds() * 1000;
-        this.tokenValidityInMillisecondsForRememberMe =
-                applicationProperties.getSecurity().getTokenValidityInSecondsForRememberMe() * 1000;
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {
@@ -53,23 +47,25 @@ public class TokenProvider extends TokenUtils {
         if (authentication.getPrincipal() instanceof CustomSpringSecurityUser) {
             partnerTin = ((CustomSpringSecurityUser) authentication.getPrincipal()).getTin();
         }
-        long now = (new Date()).getTime();
-        Date valid = getExpirationDate(rememberMe, now);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .claim(PARTNER_KEY, partnerTin)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(valid)
+                .setExpiration(Date.from(getExpirationDate(rememberMe)))
                 .compact();
     }
 
-    private Date getExpirationDate(boolean rememberMe, long now) {
+    private Instant getExpirationDate(boolean rememberMe) {
         if (rememberMe) {
-            return new Date(now + this.tokenValidityInMillisecondsForRememberMe);
+            return ZonedDateTime.now()
+                    .plusSeconds(applicationProperties.getSecurity().getTokenValidityInSecondsForRememberMe())
+                    .toInstant();
         } else {
-            return new Date(now + this.tokenValidityInMilliseconds);
+            return ZonedDateTime.now()
+                    .plusSeconds(applicationProperties.getSecurity().getTokenValidityInSeconds())
+                    .toInstant();
         }
     }
 }

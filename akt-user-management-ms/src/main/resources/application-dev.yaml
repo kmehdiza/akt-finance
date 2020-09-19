@@ -2,7 +2,7 @@ application:
   security:
     secret: ${APP_SECRET_KEY:VGhpcyBteSBzZWNyZXQga2V5IGZvciBBcHBsaWNhdGlvbi4gUGxlYXNlIGNoYW5nZSBpbiBwcm9kdWN0aW9uLg==}
     token-validity-in-seconds: 86400
-    token-validity-in-seconds-for-remember-me: 2592000
+    token-validity-in-seconds-for-remember-me: 604800
   cors:
     allowed-origins: '*'
     allowed-methods: '*'

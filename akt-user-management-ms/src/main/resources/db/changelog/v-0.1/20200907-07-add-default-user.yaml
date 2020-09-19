@@ -28,7 +28,7 @@ databaseChangeLog:
                   name: email
                   value: 'admin@akt.az'
               - column:
-                  name: create_date
+                  name: creation_date
                   valueDate: now()
               - column:
                   name: partner

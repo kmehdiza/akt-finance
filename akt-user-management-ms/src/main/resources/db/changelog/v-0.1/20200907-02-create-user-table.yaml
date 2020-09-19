@@ -50,7 +50,7 @@ databaseChangeLog:
                   type: VARCHAR(30)
                   defaultValue: ACTIVE
               - column:
-                  name: create_date
+                  name: creation_date
                   type: datetime
               - column:
                   name: partner

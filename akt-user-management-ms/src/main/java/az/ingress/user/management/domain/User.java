@@ -18,6 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -59,8 +60,8 @@ public class User {
     @Enumerated(EnumType.STRING)
     private ProfileStatus status;
 
-    @Column(name = "create_date", updatable = false)
-    private LocalDateTime createDate;
+    @Column(name = "creation_date", updatable = false)
+    private LocalDateTime creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "partner", referencedColumnName = "tin", nullable = false)
@@ -74,4 +75,9 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
+
+    @PrePersist
+    public void prePersist() {
+        this.creationDate = LocalDateTime.now();
+    }
 }

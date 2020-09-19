@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DomainUserDetailsService implements UserDetailsService {
 
-    private static final String IS_NOT_ACTIVE_MESSAGE = "User is not active!";
-
     private final UserRepository userRepository;
 
     public DomainUserDetailsService(UserRepository userRepository) {
@@ -56,7 +54,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     private void checkUserProfileStatus(User user) throws UserIsNotActiveException {
         if (user.getStatus() != ProfileStatus.ACTIVE) {
-            throw new UserIsNotActiveException(IS_NOT_ACTIVE_MESSAGE);
+            throw new UserIsNotActiveException();
         }
     }
 }

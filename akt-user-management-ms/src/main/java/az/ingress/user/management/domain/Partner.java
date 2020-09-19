@@ -46,12 +46,12 @@ public class Partner {
     private ProfileStatus status;
 
     @CreatedDate
-    @Column(name = "create_date", updatable = false)
-    private LocalDateTime createDate;
+    @Column(name = "creation_date", updatable = false)
+    private LocalDateTime creationDate;
 
     @PrePersist
     public void prePersist() {
-        this.createDate = LocalDateTime.now();
+        this.creationDate = LocalDateTime.now();
     }
 
 }
