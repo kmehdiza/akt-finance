@@ -27,7 +27,7 @@ subprojects {
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
 
-    jib.container.jvmFlags=['Xmx512m']
+    jib.container.jvmFlags = ['Xmx512m']
 
     tasks.jib.dependsOn tasks.build
 

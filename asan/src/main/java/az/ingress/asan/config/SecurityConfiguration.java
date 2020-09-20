@@ -1,8 +1,9 @@
-package az.ingress.user.management.config;
+package az.ingress.asan.config;
 
+import az.ingress.asan.jwt.JwtConfigurer;
 import az.ingress.common.security.SecurityUtils;
-import az.ingress.user.management.security.jwt.JwtConfigurer;
-import az.ingress.user.management.security.jwt.TokenProvider;
+import az.ingress.common.security.TokenUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,25 +14,20 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
-import org.springframework.web.filter.CorsFilter;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final TokenProvider tokenProvider;
-    private final CorsFilter corsFilter;
-
-    public SecurityConfiguration(TokenProvider tokenProvider, CorsFilter corsFilter) {
-        this.tokenProvider = tokenProvider;
-        this.corsFilter = corsFilter;
-    }
+    private final ApplicationProperties applicationProperties;
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public TokenUtils tokenUtils() {
+        return new TokenUtils(applicationProperties
+                .getSecurity()
+                .getSecret());
     }
 
     @Bean
@@ -39,11 +35,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new SecurityUtils();
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers(HttpMethod.OPTIONS, "/**")
-                .antMatchers("/swagger-ui.html");
+                .antMatchers(HttpMethod.OPTIONS, "/**");
     }
 
     @Override
@@ -51,7 +51,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                 .disable()
-                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
                 .headers()
                 .contentSecurityPolicy("default-src 'self'; frame-src 'self' data:; script-src 'self' " +
                         "'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' " +
@@ -59,8 +58,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .and()
                 .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)
             .and()
-                .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; " +
-                        "magnetometer 'none'; gyroscope 'none'; speaker 'none'; fullscreen 'self'; payment 'none'")
+                .featurePolicy("geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; " +
+                        "camera 'none'; magnetometer 'none'; gyroscope 'none'; speaker 'none'; " +
+                        "fullscreen 'self'; payment 'none'")
             .and()
                 .frameOptions()
                 .deny()
@@ -69,7 +69,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
                 .authorizeRequests()
-                .antMatchers("/api/authenticate").permitAll()
                 .antMatchers("/api/**").authenticated()
                 .antMatchers("/management/**").hasAnyAuthority("ROLE_ADMIN")
             .and()
@@ -77,7 +76,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private JwtConfigurer securityConfigurerAdapter() {
-        return new JwtConfigurer(tokenProvider);
+        return new JwtConfigurer(tokenUtils());
     }
 
 }

@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-03
+      author: aslanov
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: user
+            baseColumnNames: partner
+            constraintName: user_partner_fk
+            referencedTableName: partner
+            referencedColumnNames: tin
+            onDelete: CASCADE
+            onUpdate: RESTRICT
