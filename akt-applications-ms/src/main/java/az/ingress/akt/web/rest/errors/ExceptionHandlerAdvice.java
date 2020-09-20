@@ -1,14 +1,12 @@
 package az.ingress.akt.web.rest.errors;
 
+import java.util.Map;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.ServletWebRequest;
-
-import java.util.Map;
-
 
 @ControllerAdvice
 public class ExceptionHandlerAdvice extends DefaultErrorAttributes {

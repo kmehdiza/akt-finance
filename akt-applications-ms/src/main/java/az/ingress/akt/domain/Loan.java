@@ -15,11 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
+@Data
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Entity
 @Table(name = Loan.TABLE_NAME)
 public class Loan {
 

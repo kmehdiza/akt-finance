@@ -1,5 +1,9 @@
 package az.ingress.akt.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 import az.ingress.akt.client.UserManagementClientImpl;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.enums.Status;
@@ -9,17 +13,14 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.web.rest.errors.UserIsNotActiveException;
 import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import java.time.LocalDateTime;
-import java.util.Optional;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ApplicationServiceImplTest {
@@ -69,7 +70,9 @@ public class ApplicationServiceImplTest {
         when(userManagementClient.isUserActive(DUMMY_USERNAME)).thenReturn(false);
 
         //act & Assert
-        assertThatThrownBy(() -> applicationService.createApplication()).isInstanceOf(UserIsNotActiveException.class);
+        assertThatThrownBy(() ->
+                applicationService.createApplication())
+                .isInstanceOf(UserIsNotActiveException.class);
     }
 
     @Test
