@@ -1,9 +1,5 @@
 package az.ingress.akt.service.impl;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.when;
-
 import az.ingress.akt.client.UserManagementClientImpl;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.enums.Status;
@@ -13,19 +9,24 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.web.rest.errors.UserIsNotActiveException;
 import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.LocalDateTime;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class ApplicationServiceImplTest {
 
     private static final String DUMMY_USERNAME = "username";
+    private static final Long DUMMY_APPLICATION_ID = 1L;
 
     @Mock
     private SecurityUtils securityUtils;
@@ -43,9 +44,9 @@ public class ApplicationServiceImplTest {
 
     @BeforeEach
     void setUp() {
-
         loan = Loan
                 .builder()
+                .id(DUMMY_APPLICATION_ID)
                 .agentUsername(DUMMY_USERNAME)
                 .step(Step.CREATED)
                 .status(Status.ONGOING)
@@ -54,7 +55,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    public void usernameIsNotPresentThenGetException() {
+    public void whenUsernameIsNotPresentThenGetException() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
 
@@ -64,30 +65,26 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    public void usernameIsNotActiveThenGetException() {
+    public void whenUsernameIsNotActiveThenGetException() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(userManagementClient.isUserActive(DUMMY_USERNAME)).thenReturn(false);
 
         //act & Assert
-        assertThatThrownBy(() ->
-                applicationService.createApplication())
-                .isInstanceOf(UserIsNotActiveException.class);
+        assertThatThrownBy(() -> applicationService.createApplication()).isInstanceOf(UserIsNotActiveException.class);
     }
 
     @Test
-    public void createApplicationThenReturnIdDto() {
+    public void whenCreateApplicationThenReturnIdDto() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(userManagementClient.isUserActive(DUMMY_USERNAME)).thenReturn(true);
+        when(loanRepository.save(any(Loan.class))).thenReturn(loan);
 
         //Act
-        loanRepository.save(loan);
         IdDto returnedIdDto = applicationService.createApplication();
-        returnedIdDto.setApplicationId(loan.getId());
 
         // Assert
         assertThat(returnedIdDto).isEqualTo(IdDto.builder().applicationId(loan.getId()).build());
     }
-
 }

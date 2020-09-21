@@ -37,7 +37,6 @@ public class ApplicationServiceImpl implements ApplicationService {
                 .status(Status.ONGOING)
                 .createDate(LocalDateTime.now())
                 .build();
-        loanRepository.save(loan);
-        return IdDto.builder().applicationId(loan.getId()).build();
+        return new IdDto(loanRepository.save(loan).getId());
     }
 }
