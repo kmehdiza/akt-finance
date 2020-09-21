@@ -1,13 +1,12 @@
 package az.ingress.akt.service.impl;
 
-import az.ingress.akt.client.UserManagementClientImpl;
+import az.ingress.akt.client.UserManagementClient;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.enums.Status;
 import az.ingress.akt.domain.enums.Step;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
-import az.ingress.akt.web.rest.errors.UserIsNotActiveException;
 import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +28,10 @@ public class ApplicationServiceImplTest {
     private static final Long DUMMY_APPLICATION_ID = 1L;
 
     @Mock
-    private SecurityUtils securityUtils;
+    private UserManagementClient userManagementClient;
 
     @Mock
-    private UserManagementClientImpl userManagementClient;
+    private SecurityUtils securityUtils;
 
     @Mock
     private LoanRepository loanRepository;
@@ -55,7 +54,7 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    public void whenUsernameIsNotPresentThenGetException() {
+    public void givenUsernameIsNotPresentWhenCreateApplicationThenExceptionThrown() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.empty());
 
@@ -65,20 +64,11 @@ public class ApplicationServiceImplTest {
     }
 
     @Test
-    public void whenUsernameIsNotActiveThenGetException() {
+    public void givenCorrectParamsWhenCreateApplicationThenReturnIdDto() {
         //Arrange
-        when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(userManagementClient.isUserActive(DUMMY_USERNAME)).thenReturn(false);
 
-        //act & Assert
-        assertThatThrownBy(() -> applicationService.createApplication()).isInstanceOf(UserIsNotActiveException.class);
-    }
-
-    @Test
-    public void whenCreateApplicationThenReturnIdDto() {
-        //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
-        when(userManagementClient.isUserActive(DUMMY_USERNAME)).thenReturn(true);
+        userManagementClient.checkIfUserActive(DUMMY_USERNAME);
         when(loanRepository.save(any(Loan.class))).thenReturn(loan);
 
         //Act
