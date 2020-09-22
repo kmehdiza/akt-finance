@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(ApplicationController.class)
 public class ApplicationControllerTest {
 
-    private static final String CREATE_RELATIVE_PATH = "/api/application";
+    private static final String CREATE_RELATIVE_PATH = "/application";
     private static final Long DUMMY_APPLICATION_ID = 1L;
 
 
