@@ -1,10 +1,15 @@
 package az.ingress.akt.service.impl;
 
 import az.ingress.akt.client.UserManagementClient;
+import az.ingress.akt.domain.Loan;
+import az.ingress.akt.domain.enums.Status;
+import az.ingress.akt.domain.enums.Step;
+import az.ingress.akt.dto.IdDto;
+import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.ApplicationService;
-import az.ingress.akt.web.rest.errors.UserIsNotActiveException;
-import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
+import az.ingress.akt.web.rest.exception.UsernameIsNotFoundException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,15 +21,19 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     private final SecurityUtils securityUtils;
     private final UserManagementClient userManagementClient;
+    private final LoanRepository loanRepository;
 
     @Override
-    public String createApplication() {
+    public IdDto createApplication() {
         log.debug("Request to create new application");
         String username = securityUtils.getCurrentUserLogin().orElseThrow(UsernameIsNotFoundException::new);
-        if (!userManagementClient.isUserActive(username)) {
-            throw new UserIsNotActiveException();
-        }
-        return username;
+        userManagementClient.checkIfUserActive(username);
+        Loan loan = Loan.builder()
+                .agentUsername(username)
+                .step(Step.CREATED)
+                .status(Status.ONGOING)
+                .createDate(LocalDateTime.now())
+                .build();
+        return new IdDto(loanRepository.save(loan).getId());
     }
-
 }

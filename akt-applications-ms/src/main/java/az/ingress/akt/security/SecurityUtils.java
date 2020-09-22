@@ -1,5 +1,7 @@
 package az.ingress.akt.security;
 
+import java.util.Optional;
+import java.util.stream.Stream;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -7,14 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-import java.util.stream.Stream;
-
 /**
  * Utility class for Spring Security.
  */
 @Component
-public final class SecurityUtils {
+public class SecurityUtils {
 
     /**
      * Get the login of the current user.
@@ -59,8 +58,8 @@ public final class SecurityUtils {
     }
 
     /**
-     * If the current user has a specific authority (security role).
-     * The name of this method comes from the {@code isUserInRole()} method in the Servlet API.
+     * If the current user has a specific authority (security role). The name of this method comes from the {@code
+     * isUserInRole()} method in the Servlet API.
      *
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.

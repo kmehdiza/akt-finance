@@ -1,5 +1,8 @@
 package az.ingress.akt.service;
 
+import az.ingress.akt.dto.IdDto;
+
 public interface ApplicationService {
-    String createApplication();
+
+    IdDto createApplication();
 }
