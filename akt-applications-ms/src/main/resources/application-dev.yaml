@@ -5,14 +5,14 @@ application:
 spring:
   liquibase:
     enabled: true
-    changeLog: classpath:/db/changelog/db.changelog-dev.yaml
+    changeLog: classpath:db/changelog/db.changelog-dev.yaml
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://${DB_CONNECTION_ADDR:localhost}:3306/akt_backend?createDatabaseIfNotExist=true&useSSL=true&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
+    type: com.zaxxer.hikari.HikariDataSource
+    url: &connectionUrl jdbc:mysql://${DB_CONNECTION_ADDR:localhost}/akt_backend_dev?createDatabaseIfNotExist=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8
     username: &username ${DB_CONNECTION_USERNAME:root}
     password: &password ${DB_CONNECTION_PASSWORD:password}
 
+
 server:
-  port: 9091
   servlet:
     context-path: /api

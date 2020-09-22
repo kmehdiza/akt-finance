@@ -1,6 +1,6 @@
 package az.ingress.akt.domain;
 
-import az.ingress.akt.domain.enums.PersonType;
+import az.ingress.akt.domain.enums.RelativeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -13,40 +13,36 @@ import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import lombok.Builder;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Data
-@Builder
+@ToString(exclude = "loan")
+@EqualsAndHashCode(exclude = "loan")
+@NoArgsConstructor
 @Table(name = Person.TABLE_NAME, indexes = {
-        @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true),
-        @Index(columnList = Person.PERSON_TYPE_COLUMN,name = Person.PERSON_TYPE_INDEX,unique = true)
+        @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true)
 })
 public class Person {
 
     public static final String TABLE_NAME = "person";
     public static final String FIN_CODE_COLUMN = "fin_code";
-    public static final String PERSON_TYPE_COLUMN = "person_type";
     public static final String INDEX = "_index";
     public static final String FIN_CODE_INDEX = FIN_CODE_COLUMN + INDEX;
-    public static final String PERSON_TYPE_INDEX = PERSON_TYPE_COLUMN + INDEX;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "person_type")
-    private PersonType personType;
+    private RelativeType relativeType;
 
     private String fullName;
 
-    @Column(name = "fin_code")
+    @Column(name = FIN_CODE_COLUMN)
     private String finCode;
 
     private String idImage1;
@@ -55,9 +51,8 @@ public class Person {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "application_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @Cascade(CascadeType.SAVE_UPDATE)
     private Loan loan;
 
     private String signatureImage;
 }
+

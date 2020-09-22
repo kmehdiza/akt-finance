@@ -1,7 +1,7 @@
 package az.ingress.akt.web.rest;
 
-import az.ingress.akt.dto.RelativeResponseDto;
-import az.ingress.akt.service.RelativeService;
+import az.ingress.akt.domain.Person;
+import az.ingress.akt.service.LoanService;
 import java.util.List;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -17,11 +17,11 @@ public class RelativeController {
 
     private static final String APPLICATION_ID_MUST_BE_POSITIVE = "Application Id must be positive";
 
-    private final RelativeService relativeService;
+    private final LoanService loanService;
 
     @GetMapping("/debtor/relatives/{applicationId}")
-    public List<RelativeResponseDto> getRelatives(
+    public List<Person> getRelatives(
             @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("applicationId") Long applicationId) {
-        return relativeService.getRelatives(applicationId);
+        return loanService.getRelativesByApplicationId(applicationId);
     }
 }

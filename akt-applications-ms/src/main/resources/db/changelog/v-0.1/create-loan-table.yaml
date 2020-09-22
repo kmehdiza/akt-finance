@@ -10,11 +10,10 @@ databaseChangeLog:
                   constraints:
                     primaryKey: true
                     primaryKeyName: loan_application_pkey
-                    nullable: false
                   name: id
                   type: bigint
               - column:
-                  name: step
+                  name: application_step
                   type: varchar(50)
               - column:
                   name: agent_username

@@ -21,7 +21,7 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: person_type
+                  name: relative_type
                   type: varchar(255)
               - column:
                   constraints:

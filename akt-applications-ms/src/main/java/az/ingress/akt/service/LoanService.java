@@ -1,9 +1,10 @@
 package az.ingress.akt.service;
 
-import az.ingress.akt.domain.Loan;
+import az.ingress.akt.domain.Person;
+import java.util.List;
 
 public interface LoanService {
 
-    Loan findById(Long applicationId);
+    List<Person> getRelativesByApplicationId(Long applicationId);
 
 }
