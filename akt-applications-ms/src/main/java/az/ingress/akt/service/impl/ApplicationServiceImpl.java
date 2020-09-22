@@ -1,6 +1,5 @@
 package az.ingress.akt.service.impl;
 
-import java.time.LocalDateTime;
 import az.ingress.akt.client.UserManagementClient;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.enums.Status;
@@ -9,7 +8,8 @@ import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.ApplicationService;
-import az.ingress.akt.web.rest.errors.UsernameIsNotFoundException;
+import az.ingress.akt.web.rest.exception.UsernameIsNotFoundException;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

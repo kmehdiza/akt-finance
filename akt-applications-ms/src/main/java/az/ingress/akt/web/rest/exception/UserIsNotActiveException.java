@@ -1,4 +1,4 @@
-package az.ingress.akt.web.rest.errors;
+package az.ingress.akt.web.rest.exception;
 
 public class UserIsNotActiveException extends RuntimeException {
 
