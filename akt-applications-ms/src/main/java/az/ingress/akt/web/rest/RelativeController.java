@@ -3,6 +3,7 @@ package az.ingress.akt.web.rest;
 import az.ingress.akt.domain.Person;
 import az.ingress.akt.service.LoanService;
 import java.util.List;
+import java.util.Set;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +21,7 @@ public class RelativeController {
     private final LoanService loanService;
 
     @GetMapping("/debtor/relatives/{applicationId}")
-    public List<Person> getRelatives(
+    public Set<Person> getRelatives(
             @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("applicationId") Long applicationId) {
         return loanService.getRelativesByApplicationId(applicationId);
     }

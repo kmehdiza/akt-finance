@@ -16,7 +16,7 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: application_id
+                  name: loan_application_id
                   type: bigint
               - column:
                   constraints:

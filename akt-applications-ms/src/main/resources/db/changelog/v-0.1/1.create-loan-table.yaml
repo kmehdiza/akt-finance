@@ -19,6 +19,6 @@ databaseChangeLog:
                   name: agent_username
                   type: varchar(255)
               - column:
-                  name: customer_Fin
-                  type: varchar(10)
+                  name: debtor_id
+                  type: bigint
             tableName: loan_application

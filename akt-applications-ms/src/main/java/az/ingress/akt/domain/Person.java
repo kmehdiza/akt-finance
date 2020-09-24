@@ -1,6 +1,9 @@
 package az.ingress.akt.domain;
 
 import az.ingress.akt.domain.enums.RelativeType;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,8 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,10 +51,9 @@ public class Person {
 
     private String idImage2;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id")
-    private Loan loan;
-
     private String signatureImage;
+
+    @OneToMany(mappedBy = "loan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Person> relatives = new HashSet<>();
 }
 

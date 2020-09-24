@@ -43,13 +43,8 @@ public class Loan {
 
     private String agentUsername;
 
-    private String customerFin;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "debtor_id")
     private Person debtor;
-
-    @OneToMany(mappedBy = "loan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Person> relatives = new HashSet<>();
 }
 
