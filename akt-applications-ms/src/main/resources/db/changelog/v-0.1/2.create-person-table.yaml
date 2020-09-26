@@ -16,11 +16,6 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
-                  name: loan_application_id
-                  type: bigint
-              - column:
-                  constraints:
-                    nullable: false
                   name: relative_type
                   type: varchar(255)
               - column:
@@ -38,6 +33,10 @@ databaseChangeLog:
                     nullable: false
                   name: id_image1
                   type: varchar(255)
+              - column:
+                  constraints:
+                  name: debtor_id
+                  type: bigint
               - column:
                   constraints:
                     nullable: false

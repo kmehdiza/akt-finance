@@ -13,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.Data;
@@ -22,8 +24,8 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = "loan")
-@EqualsAndHashCode(exclude = "loan")
+@ToString(exclude = "relatives")
+@EqualsAndHashCode(exclude = "relatives")
 @NoArgsConstructor
 @Table(name = Person.TABLE_NAME, indexes = {
         @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true)
@@ -47,13 +49,17 @@ public class Person {
     @Column(name = FIN_CODE_COLUMN)
     private String finCode;
 
+    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="debtor_id")
+    private Person debtor;
+
+    @OneToMany(mappedBy="debtor")
+    private Set<Person> relatives = new HashSet<>();
+
     private String idImage1;
 
     private String idImage2;
 
     private String signatureImage;
-
-    @OneToMany(mappedBy = "loan", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Person> relatives = new HashSet<>();
 }
 

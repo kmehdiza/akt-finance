@@ -1,20 +1,13 @@
 package az.ingress.akt.domain;
 
 import az.ingress.akt.domain.enums.ApplicationStep;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.Data;
@@ -25,14 +18,12 @@ import lombok.ToString;
 @Entity
 @Data
 @NoArgsConstructor
-@ToString(exclude = {"debtor", "relatives"})
-@EqualsAndHashCode(exclude = {"debtor", "relatives"})
+@ToString(exclude = {"debtor"})
+@EqualsAndHashCode(exclude = {"debtor"})
 @Table(name = Loan.TABLE_NAME)
-@NamedEntityGraph(name = "graph.Loan.relatives",
-        attributeNodes = @NamedAttributeNode("relatives"))
 public class Loan {
 
-    public static final String TABLE_NAME = "loan_application";
+    public static final String TABLE_NAME = "loan";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +34,7 @@ public class Loan {
 
     private String agentUsername;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "debtor_id")
     private Person debtor;
 }

@@ -21,4 +21,4 @@ databaseChangeLog:
               - column:
                   name: debtor_id
                   type: bigint
-            tableName: loan_application
+            tableName: loan

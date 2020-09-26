@@ -1,10 +1,10 @@
 package az.ingress.akt.service;
 
-import az.ingress.akt.domain.Person;
+import az.ingress.akt.dto.PersonDto;
 import java.util.Set;
 
 public interface LoanService {
 
-    Set<Person> getRelativesByApplicationId(Long applicationId);
+    Set<PersonDto> getRelativesByApplicationId(Long applicationId);
 
 }

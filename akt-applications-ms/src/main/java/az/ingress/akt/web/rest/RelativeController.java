@@ -1,28 +1,31 @@
 package az.ingress.akt.web.rest;
 
-import az.ingress.akt.domain.Person;
+import az.ingress.akt.dto.PersonDto;
 import az.ingress.akt.service.LoanService;
-import java.util.List;
 import java.util.Set;
 import javax.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @Validated
-@Controller
+@RestController
+@RequestMapping("/debtor")
 @RequiredArgsConstructor
 public class RelativeController {
 
-    private static final String APPLICATION_ID_MUST_BE_POSITIVE = "Application Id must be positive";
+    private static final String APPLICATION_ID_MUST_BE_POSITIVE = "Loan id must be positive";
 
     private final LoanService loanService;
 
-    @GetMapping("/debtor/relatives/{applicationId}")
-    public Set<Person> getRelatives(
-            @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("applicationId") Long applicationId) {
+    @GetMapping("/relatives/{loanId}")
+    public Set<PersonDto> getRelatives(
+            @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("loanId") Long applicationId) {
         return loanService.getRelativesByApplicationId(applicationId);
     }
 }
