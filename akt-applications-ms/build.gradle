@@ -27,10 +27,14 @@ dependencies {
 
     implementation 'org.liquibase:liquibase-core'
 
+	implementation 'org.liquibase:liquibase-core'
+
+    implementation("org.modelmapper:modelmapper:$modelmapperVersion")
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    runtimeOnly 'mysql:mysql-connector-java'
+    runtimeOnly "mysql:mysql-connector-java:${mysqlVersion}"
 
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation('org.springframework.boot:spring-boot-starter-test') {

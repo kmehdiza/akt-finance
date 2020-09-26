@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-to-person
+      author: atbakirov
+      changes:
+        - sql:
+            sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
+              values ("3585gh", "SCOOBY DOO", "image.url", "image.url",  1, "DEBTOR" , "signatureimage.url");
+        - sql:
+            sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
+              values ("15fggh", "JOHN SMITH", "image.url", "image.url", 1, "BROTHER", "signatureimage.url");
+        - sql:
+            sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
+              values ("24585gh", "Donald DUCK", "image.url", "image.url", 1, "SON", "signatureimage.url");
+        - sql:
+            sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
+              values ("385gh", "MICKEY MOUSE", "image.url", "image.url", 1,  "SISTER", "signatureimage.url");

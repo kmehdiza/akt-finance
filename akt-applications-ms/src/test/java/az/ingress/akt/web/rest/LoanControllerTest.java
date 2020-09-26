@@ -13,8 +13,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.security.jwt.TokenProvider;
-import az.ingress.akt.service.ApplicationService;
-import az.ingress.akt.web.rest.exception.UsernameIsNotFoundException;
+import az.ingress.akt.service.LoanService;
+import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(ApplicationController.class)
-public class ApplicationControllerTest {
+@WebMvcTest(LoanController.class)
+public class LoanControllerTest {
 
-    private static final String CREATE_RELATIVE_PATH = "/application";
+    private static final String CREATE_RELATIVE_PATH = "/loan";
     private static final Long DUMMY_APPLICATION_ID = 1L;
     private final IdDto idDto = new IdDto(DUMMY_APPLICATION_ID);
 
@@ -41,7 +41,7 @@ public class ApplicationControllerTest {
     private TokenProvider tokenProvider;
 
     @MockBean
-    private ApplicationService applicationService;
+    private LoanService loanService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ public class ApplicationControllerTest {
     @Test
     public void givenCorrectParamWhenCreateApplicationThenReturnIsOk() throws Exception {
         //Arrange
-        when(applicationService.createApplication()).thenReturn(idDto);
+        when(loanService.createApplication()).thenReturn(idDto);
 
         //Act
         mockMvc.perform(post(CREATE_RELATIVE_PATH)
@@ -60,7 +60,7 @@ public class ApplicationControllerTest {
     @Test
     public void givenUsernameIsNotExistWhenCreateApplicationThenExceptionThrown() throws Exception {
         //Arrange
-        doThrow(new UsernameIsNotFoundException()).when(applicationService).createApplication();
+        doThrow(new UserNotFoundException()).when(loanService).createApplication();
 
         //Act
         mockMvc.perform(post(CREATE_RELATIVE_PATH)
@@ -68,7 +68,7 @@ public class ApplicationControllerTest {
                 .accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(ERROR_STATUS, is(HttpStatus.BAD_REQUEST.value())))
-                .andExpect(jsonPath(ERROR_MESSAGE, is(UsernameIsNotFoundException.MESSAGE)))
+                .andExpect(jsonPath(ERROR_MESSAGE, is(UserNotFoundException.MESSAGE)))
                 .andExpect(jsonPath(TIMESTAMP).isNotEmpty())
                 .andExpect(jsonPath(HttpResponseConstants.ERROR_PHRASE, is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
                 .andExpect(jsonPath(ERROR_PATH, is(CREATE_RELATIVE_PATH)));

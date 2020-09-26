@@ -1,0 +1,15 @@
+<configuration>
+  <appender class="ch.qos.logback.core.ConsoleAppender" name="CONSOLE">
+    <encoder>
+      <Pattern>
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%15.15t] %40.40c{40} : %msg%n
+      </Pattern>
+    </encoder>
+  </appender>
+  <logger additivity="false" level="TRACE" name="az.ingress">
+    <appender-ref ref="CONSOLE"/>
+  </logger>
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>

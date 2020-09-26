@@ -9,25 +9,35 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Data
 @Entity
+@Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = {"debtor"})
+@EqualsAndHashCode(exclude = {"debtor"})
 @Table(name = Loan.TABLE_NAME)
 public class Loan {
 
-    public static final String TABLE_NAME = "loan_application";
+    public static final String TABLE_NAME = "loan";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToOne
+    @JoinColumn(name = "debtor_id")
+    private Person debtor;
 
     @Enumerated(EnumType.STRING)
     private Step step;
