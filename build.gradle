@@ -20,11 +20,14 @@ allprojects {
 }
 
 subprojects {
+    sourceCompatibility = jdk_version
+    targetCompatibility = jdk_version
+
     apply plugin: 'com.google.cloud.tools.jib'
     apply plugin: 'pmd'
     apply plugin: 'checkstyle'
 
-    jib.container.jvmFlags=['Xmx512m']
+    jib.container.jvmFlags = ['Xmx512m']
 
     tasks.jib.dependsOn tasks.build
 

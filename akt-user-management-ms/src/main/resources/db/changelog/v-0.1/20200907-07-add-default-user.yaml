@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-07
+      author: aslanov
+      changes:
+        - insert:
+            tableName: user
+            columns:
+              - column:
+                  name: username
+                  value: 'admin'
+              - column:
+                  name: password
+                  value: '$2a$10$f0zqjKXV4MEwHinjHcWUpeeVpeGH55k4FsHqDQhuAxCUmMrV.CmD.' #123456
+              - column:
+                  name: name
+                  value: 'admin'
+              - column:
+                  name: surname
+                  value: 'admin'
+              - column:
+                  name: user_description
+                  value: 'Default admin user'
+              - column:
+                  name: phone
+                  value: '+994'
+              - column:
+                  name: email
+                  value: 'admin@akt.az'
+              - column:
+                  name: creation_date
+                  valueDate: now()
+              - column:
+                  name: partner
+                  valueComputed: "2006235061"

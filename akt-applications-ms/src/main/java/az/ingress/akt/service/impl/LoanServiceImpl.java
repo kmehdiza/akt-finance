@@ -1,7 +1,6 @@
 package az.ingress.akt.service.impl;
 
 import az.ingress.akt.domain.Loan;
-import az.ingress.akt.domain.Person;
 import az.ingress.akt.dto.PersonDto;
 import az.ingress.akt.exception.NotFoundException;
 import az.ingress.akt.repository.LoanRepository;
@@ -29,8 +28,8 @@ public class LoanServiceImpl implements LoanService {
     public Set<PersonDto> getRelativesByApplicationId(Long loanId) {
         Loan loan = findByIdAndAgentUsername(loanId);
         return loan.getDebtor().getRelatives().stream()
-                 .map((p)->mapper.map(p, PersonDto.class))
-                 .collect(Collectors.toSet());
+                .map((p) -> mapper.map(p, PersonDto.class))
+                .collect(Collectors.toSet());
     }
 
     private Loan findByIdAndAgentUsername(Long loanId) {

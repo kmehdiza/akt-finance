@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-08
+      author: aslanov
+      changes:
+        - insert:
+            tableName: authority
+            columns:
+              - column:
+                  name: name
+                  value: 'ROLE_ADMIN'
+        - insert:
+            tableName: authority
+            columns:
+              - column:
+                  name: name
+                  value: 'ROLE_AGENT'
+        - insert:
+            tableName: authority
+            columns:
+              - column:
+                  name: name
+                  value: 'ROLE_PARTNER'

@@ -1,4 +1,4 @@
-package az.ingress.user.management.security;
+package az.ingress.common.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,28 +12,25 @@ import java.util.stream.Stream;
 /**
  * Utility class for Spring Security.
  */
-public final class SecurityUtils {
-
-    private SecurityUtils() {
-    }
+public class SecurityUtils {
 
     /**
      * Get the login of the current user.
      *
      * @return the login of the current user.
      */
-    public static Optional<String> getCurrentUserLogin() {
+    public Optional<String> getCurrentUserLogin() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-            .map(authentication -> {
-                if (authentication.getPrincipal() instanceof UserDetails) {
-                    UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
-                    return springSecurityUser.getUsername();
-                } else if (authentication.getPrincipal() instanceof String) {
-                    return (String) authentication.getPrincipal();
-                }
-                return null;
-            });
+                .map(authentication -> {
+                    if (authentication.getPrincipal() instanceof UserDetails) {
+                        UserDetails springSecurityUser = (UserDetails) authentication.getPrincipal();
+                        return springSecurityUser.getUsername();
+                    } else if (authentication.getPrincipal() instanceof String) {
+                        return (String) authentication.getPrincipal();
+                    }
+                    return null;
+                });
     }
 
     /**
@@ -41,11 +38,11 @@ public final class SecurityUtils {
      *
      * @return the JWT of the current user.
      */
-    public static Optional<String> getCurrentUserJwt() {
+    public Optional<String> getCurrentUserJwt() {
         SecurityContext securityContext = SecurityContextHolder.getContext();
         return Optional.ofNullable(securityContext.getAuthentication())
-            .filter(authentication -> authentication.getCredentials() instanceof String)
-            .map(authentication -> (String) authentication.getCredentials());
+                .filter(authentication -> authentication.getCredentials() instanceof String)
+                .map(authentication -> (String) authentication.getCredentials());
     }
 
     /**
@@ -53,7 +50,7 @@ public final class SecurityUtils {
      *
      * @return true if the user is authenticated, false otherwise.
      */
-    public static boolean isAuthenticated() {
+    public boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null
                 && getAuthorities(authentication).noneMatch(AuthoritiesConstants.ANONYMOUS::equals);
@@ -66,15 +63,15 @@ public final class SecurityUtils {
      * @param authority the authority to check.
      * @return true if the current user has the authority, false otherwise.
      */
-    public static boolean isCurrentUserInRole(String authority) {
+    public boolean isCurrentUserInRole(String authority) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null
                 && getAuthorities(authentication).anyMatch(authority::equals);
     }
 
-    private static Stream<String> getAuthorities(Authentication authentication) {
+    private Stream<String> getAuthorities(Authentication authentication) {
         return authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority);
+                .map(GrantedAuthority::getAuthority);
     }
 
 }

@@ -1,6 +1,5 @@
 package az.ingress.akt.dto;
 
-import az.ingress.akt.domain.Person;
 import az.ingress.akt.domain.enums.RelativeType;
 import lombok.Data;
 

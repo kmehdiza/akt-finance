@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907-09
+      author: aslanov
+      changes:
+        - insert:
+            tableName: user_authority
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(select id from user where username='admin')"
+              - column:
+                  name: authority_name
+                  value: 'ROLE_ADMIN'
+        - insert:
+            tableName: user_authority
+            columns:
+              - column:
+                  name: user_id
+                  valueComputed: "(select id from user where username='admin')"
+              - column:
+                  name: authority_name
+                  value: 'ROLE_AGENT'

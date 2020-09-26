@@ -15,6 +15,3 @@ databaseChangeLog:
         - sql:
             sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
               values ("385gh", "MICKEY MOUSE", "image.url", "image.url", 1,  "SISTER", "signatureimage.url");
-
-
-

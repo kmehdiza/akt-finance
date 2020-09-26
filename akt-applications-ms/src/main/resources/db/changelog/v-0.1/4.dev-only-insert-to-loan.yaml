@@ -5,4 +5,3 @@ databaseChangeLog:
       changes:
         - sql:
             sql: insert into loan (agent_username, debtor_id, application_step) values ("mustafa", 1, " FIRST_INFORMATIONS");
-

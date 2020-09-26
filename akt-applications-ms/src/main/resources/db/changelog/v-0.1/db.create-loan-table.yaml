@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20200907
+      author: kmehdiza
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: loan_application_pkey
+                  name: id
+                  type: bigint
+              - column:
+                  name: step
+                  type: varchar(50)
+              - column:
+                  name: status
+                  type: varchar(50)
+              - column:
+                  name: create_date
+                  type: datetime
+              - column:
+                  name: agent_username
+                  type: varchar(255)
+            tableName: loan_application

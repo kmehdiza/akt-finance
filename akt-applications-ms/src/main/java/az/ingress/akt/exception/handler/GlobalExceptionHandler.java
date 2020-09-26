@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -35,13 +34,13 @@ public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(NotFoundException ex,
-                                                                                        WebRequest request) {
+            WebRequest request) {
         return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public final ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException ex,
-                                                                                        WebRequest request) {
+            WebRequest request) {
         return ofType(request, HttpStatus.BAD_REQUEST, getConstraintViolationExceptionMessage(ex));
     }
 

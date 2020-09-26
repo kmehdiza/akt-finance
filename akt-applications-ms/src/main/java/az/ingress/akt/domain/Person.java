@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -49,11 +48,11 @@ public class Person {
     @Column(name = FIN_CODE_COLUMN)
     private String finCode;
 
-    @ManyToOne(cascade={CascadeType.ALL})
-    @JoinColumn(name="debtor_id")
+    @ManyToOne(cascade = {CascadeType.ALL})
+    @JoinColumn(name = "debtor_id")
     private Person debtor;
 
-    @OneToMany(mappedBy="debtor")
+    @OneToMany(mappedBy = "debtor")
     private Set<Person> relatives = new HashSet<>();
 
     private String idImage1;
