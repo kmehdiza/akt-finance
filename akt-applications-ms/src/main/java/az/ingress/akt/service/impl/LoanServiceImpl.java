@@ -6,10 +6,10 @@ import az.ingress.akt.domain.enums.Status;
 import az.ingress.akt.domain.enums.Step;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.dto.PersonDto;
-import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
+import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -49,7 +49,7 @@ public class LoanServiceImpl implements LoanService {
     public Set<PersonDto> getRelativesByApplicationId(Long loanId) {
         Loan loan = findByIdAndAgentUsername(loanId);
         return loan.getDebtor().getRelatives().stream()
-                .map((p) -> mapper.map(p, PersonDto.class))
+                .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toSet());
     }
 
@@ -64,6 +64,5 @@ public class LoanServiceImpl implements LoanService {
         return securityUtils.getCurrentUserLogin()
                 .orElseThrow(() -> new NotFoundException("Agent username not found"));
     }
-
 
 }

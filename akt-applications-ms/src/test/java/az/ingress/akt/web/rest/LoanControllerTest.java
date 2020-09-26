@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.security.jwt.TokenProvider;
-import az.ingress.akt.service.ApplicationService;
+import az.ingress.akt.service.LoanService;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @WebMvcTest(LoanController.class)
 public class LoanControllerTest {
 
-    private static final String CREATE_RELATIVE_PATH = "/application";
+    private static final String CREATE_RELATIVE_PATH = "/loan";
     private static final Long DUMMY_APPLICATION_ID = 1L;
     private final IdDto idDto = new IdDto(DUMMY_APPLICATION_ID);
 
@@ -41,7 +41,7 @@ public class LoanControllerTest {
     private TokenProvider tokenProvider;
 
     @MockBean
-    private ApplicationService applicationService;
+    private LoanService loanService;
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +49,7 @@ public class LoanControllerTest {
     @Test
     public void givenCorrectParamWhenCreateApplicationThenReturnIsOk() throws Exception {
         //Arrange
-        when(applicationService.createApplication()).thenReturn(idDto);
+        when(loanService.createApplication()).thenReturn(idDto);
 
         //Act
         mockMvc.perform(post(CREATE_RELATIVE_PATH)
@@ -60,7 +60,7 @@ public class LoanControllerTest {
     @Test
     public void givenUsernameIsNotExistWhenCreateApplicationThenExceptionThrown() throws Exception {
         //Arrange
-        doThrow(new UserNotFoundException()).when(applicationService).createApplication();
+        doThrow(new UserNotFoundException()).when(loanService).createApplication();
 
         //Act
         mockMvc.perform(post(CREATE_RELATIVE_PATH)

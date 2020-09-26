@@ -23,7 +23,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class ApplicationServiceImplTest {
+public class LoanServiceImplTest {
 
     private static final String DUMMY_USERNAME = "username";
     private static final Long DUMMY_APPLICATION_ID = 1L;
@@ -38,7 +38,7 @@ public class ApplicationServiceImplTest {
     private LoanRepository loanRepository;
 
     @InjectMocks
-    private ApplicationServiceImpl applicationService;
+    private LoanServiceImpl loanService;
 
     private Loan loan;
 
@@ -61,7 +61,7 @@ public class ApplicationServiceImplTest {
 
         //Act & Assert
         assertThatThrownBy(() ->
-                applicationService.createApplication()).isInstanceOf(UserNotFoundException.class);
+                loanService.createApplication()).isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ApplicationServiceImplTest {
         when(loanRepository.save(any(Loan.class))).thenReturn(loan);
 
         //Act
-        IdDto returnedIdDto = applicationService.createApplication();
+        IdDto returnedIdDto = loanService.createApplication();
 
         // Assert
         assertThat(returnedIdDto).isEqualTo(IdDto.builder().applicationId(loan.getId()).build());
