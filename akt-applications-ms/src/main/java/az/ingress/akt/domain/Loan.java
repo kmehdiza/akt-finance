@@ -1,6 +1,5 @@
 package az.ingress.akt.domain;
 
-import az.ingress.akt.domain.enums.ApplicationStep;
 import az.ingress.akt.domain.enums.Status;
 import az.ingress.akt.domain.enums.Step;
 import java.time.LocalDateTime;
@@ -36,13 +35,11 @@ public class Loan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private ApplicationStep applicationStep;
-
     @OneToOne
     @JoinColumn(name = "debtor_id")
     private Person debtor;
 
+    @Enumerated(EnumType.STRING)
     private Step step;
 
     @Enumerated(EnumType.STRING)

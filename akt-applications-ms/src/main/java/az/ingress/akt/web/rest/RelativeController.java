@@ -19,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RelativeController {
 
-    private static final String APPLICATION_ID_MUST_BE_POSITIVE = "Loan id must be positive";
+    private static final String LOAN_ID_MUST_BE_POSITIVE = "Loan id must be positive";
 
     private final LoanService loanService;
 
     @GetMapping("/relatives/{loanId}")
-    public Set<PersonDto> getRelatives(
-            @Positive(message = APPLICATION_ID_MUST_BE_POSITIVE) @PathVariable("loanId") Long applicationId) {
-        return loanService.getRelativesByApplicationId(applicationId);
+    public Set<PersonDto> getRelativesByLoanId(
+            @Positive(message = LOAN_ID_MUST_BE_POSITIVE)
+            @PathVariable("loanId") Long loanId) {
+        return loanService.getRelativesByLoanId(loanId);
     }
 }

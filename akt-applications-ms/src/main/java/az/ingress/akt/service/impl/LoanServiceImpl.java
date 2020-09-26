@@ -46,7 +46,7 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     @Transactional
-    public Set<PersonDto> getRelativesByApplicationId(Long loanId) {
+    public Set<PersonDto> getRelativesByLoanId(Long loanId) {
         Loan loan = findByIdAndAgentUsername(loanId);
         return loan.getDebtor().getRelatives().stream()
                 .map(p -> mapper.map(p, PersonDto.class))

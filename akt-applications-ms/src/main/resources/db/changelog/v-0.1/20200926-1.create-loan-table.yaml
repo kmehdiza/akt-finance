@@ -13,9 +13,6 @@ databaseChangeLog:
                   name: id
                   type: bigint
               - column:
-                  name: application_step
-                  type: varchar(50)
-              - column:
                   name: agent_username
                   type: varchar(255)
               - column:

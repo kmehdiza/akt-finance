@@ -35,13 +35,13 @@ databaseChangeLog:
                   type: varchar(255)
               - column:
                   constraints:
-                  name: debtor_id
-                  type: bigint
-              - column:
-                  constraints:
                     nullable: false
                   name: id_image2
                   type: varchar(255)
+              - column:
+                  constraints:
+                  name: debtor_id
+                  type: bigint
               - column:
                   name: signature_image
                   type: varchar(255)

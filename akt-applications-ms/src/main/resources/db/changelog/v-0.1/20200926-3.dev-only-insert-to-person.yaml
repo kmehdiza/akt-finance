@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - sql:
             sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
-              values ("3585gh", "SCOOBY DOO", "image.url", "image.url",  null, "DEBTOR" , "signatureimage.url");
+              values ("3585gh", "SCOOBY DOO", "image.url", "image.url",  1, "DEBTOR" , "signatureimage.url");
         - sql:
             sql: insert into person (fin_code, full_name, id_image1, id_image2, debtor_id, relative_type, signature_image)
               values ("15fggh", "JOHN SMITH", "image.url", "image.url", 1, "BROTHER", "signatureimage.url");

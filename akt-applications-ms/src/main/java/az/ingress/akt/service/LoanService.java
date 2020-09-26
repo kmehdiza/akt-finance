@@ -8,6 +8,6 @@ public interface LoanService {
 
     IdDto createApplication();
 
-    Set<PersonDto> getRelativesByApplicationId(Long applicationId);
+    Set<PersonDto> getRelativesByLoanId(Long loanId);
 
 }
