@@ -2,7 +2,7 @@ package az.ingress.akt.service.impl;
 
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.dto.PersonDto;
-import az.ingress.akt.exception.NotFoundException;
+import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;

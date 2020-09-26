@@ -1,7 +1,5 @@
-package az.ingress.akt.exception.handler;
+package az.ingress.akt.web.rest.exception;
 
-import az.ingress.akt.exception.ApplicationStepNotCorrectException;
-import az.ingress.akt.exception.NotFoundException;
 import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
@@ -25,17 +23,16 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestController
 public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
-    @ExceptionHandler(ApplicationStepNotCorrectException.class)
-    public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(
-            ApplicationStepNotCorrectException ex,
-            WebRequest request) {
-        return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
-    }
-
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(NotFoundException ex,
             WebRequest request) {
         return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidStateException.class)
+    public final ResponseEntity<Map<String, Object>> handleInvalidStateException(InvalidStateException ex,
+            WebRequest request) {
+        return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)

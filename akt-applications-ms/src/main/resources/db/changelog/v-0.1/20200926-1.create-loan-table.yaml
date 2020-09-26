@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
-      id: 20200907
-      author: kmehdiza
+      id: create-loan-table
+      author: tural
       changes:
         - createTable:
             columns:
@@ -9,19 +9,25 @@ databaseChangeLog:
                   autoIncrement: true
                   constraints:
                     primaryKey: true
-                    primaryKeyName: loan_application_pkey
+                    primaryKeyName: loan_pkey
                   name: id
                   type: bigint
               - column:
-                  name: step
+                  name: application_step
                   type: varchar(50)
+              - column:
+                  name: agent_username
+                  type: varchar(255)
               - column:
                   name: status
                   type: varchar(50)
               - column:
+                  name: step
+                  type: varchar(50)
+              - column:
+                  name: debtor_id
+                  type: bigint
+              - column:
                   name: create_date
                   type: datetime
-              - column:
-                  name: agent_username
-                  type: varchar(255)
-            tableName: loan_application
+            tableName: loan

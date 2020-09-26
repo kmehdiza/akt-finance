@@ -12,7 +12,7 @@ import az.ingress.akt.domain.enums.Step;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
-import az.ingress.akt.web.rest.exception.UsernameIsNotFoundException;
+import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,7 +61,7 @@ public class ApplicationServiceImplTest {
 
         //Act & Assert
         assertThatThrownBy(() ->
-                applicationService.createApplication()).isInstanceOf(UsernameIsNotFoundException.class);
+                applicationService.createApplication()).isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

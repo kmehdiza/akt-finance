@@ -1,4 +1,4 @@
-package az.ingress.akt.exception;
+package az.ingress.akt.web.rest.exception;
 
 public class NotFoundException extends RuntimeException {
 

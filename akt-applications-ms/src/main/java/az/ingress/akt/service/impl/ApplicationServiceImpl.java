@@ -8,7 +8,7 @@ import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.ApplicationService;
-import az.ingress.akt.web.rest.exception.UsernameIsNotFoundException;
+import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     public IdDto createApplication() {
         log.debug("Request to create new application");
-        String username = securityUtils.getCurrentUserLogin().orElseThrow(UsernameIsNotFoundException::new);
+        String username = securityUtils.getCurrentUserLogin().orElseThrow(UserNotFoundException::new);
         userManagementClient.checkIfUserActive(username);
         Loan loan = Loan.builder()
                 .agentUsername(username)
