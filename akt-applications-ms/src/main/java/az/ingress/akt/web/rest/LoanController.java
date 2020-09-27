@@ -4,6 +4,7 @@ import az.ingress.akt.dto.DebtorDto;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.service.LoanService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.constraints.Positive;
 
+@Validated
 @RestController
 @RequiredArgsConstructor
 public class LoanController {
@@ -26,8 +28,8 @@ public class LoanController {
 
     @PostMapping("/debtor/{applicationId}")
     public void createDebtor(
-            @Positive(message = ID_MUST_BE_POSITIVE) @PathVariable("applicationId") Long applicationId,
-            @RequestBody DebtorDto debtorDto
+            @PathVariable("applicationId") @Positive(message = ID_MUST_BE_POSITIVE) Long applicationId,
+            @RequestBody @Validated DebtorDto debtorDto
     ) {
         applicationService.createDebtor(applicationId, debtorDto);
     }

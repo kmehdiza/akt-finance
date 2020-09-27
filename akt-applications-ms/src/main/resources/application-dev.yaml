@@ -12,6 +12,6 @@ spring:
     username: &username ${DB_CONNECTION_USERNAME:root}
     password: &password ${DB_CONNECTION_PASSWORD:password}
 
-server:
-  servlet:
-    context-path: /api/
+#server:
+#  servlet:
+#    context-path: /api/

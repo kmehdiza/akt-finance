@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
@@ -25,19 +26,25 @@ public class GlobalExceptionHandler extends DefaultErrorAttributes {
 
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<Map<String, Object>> handleApplicationNotFoundException(NotFoundException ex,
-            WebRequest request) {
+                                                                                        WebRequest request) {
         return ofType(request, HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(InvalidStateException.class)
     public final ResponseEntity<Map<String, Object>> handleInvalidStateException(InvalidStateException ex,
-            WebRequest request) {
+                                                                                 WebRequest request) {
+        return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
+    }
+
+    @ExceptionHandler(AlreadyExistException.class)
+    public final ResponseEntity<Map<String, Object>> handleAlreadyExistException(AlreadyExistException ex,
+                                                                                 WebRequest request) {
         return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public final ResponseEntity<Map<String, Object>> handleConstraintViolationException(ConstraintViolationException ex,
-            WebRequest request) {
+                                                                                        WebRequest request) {
         return ofType(request, HttpStatus.BAD_REQUEST, getConstraintViolationExceptionMessage(ex));
     }
 
