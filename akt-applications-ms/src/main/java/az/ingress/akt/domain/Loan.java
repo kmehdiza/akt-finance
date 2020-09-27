@@ -12,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -48,4 +50,24 @@ public class Loan {
     private LocalDateTime createDate;
 
     private String agentUsername;
+
+    @NotNull
+    private Double requestedLoanAmount;
+
+    @NotNull
+    private Integer requestedLoanDuration;
+
+    @NotNull
+    private String initialAllocation;
+
+    @NotNull
+    private String initialAllocationDetails;
+
+    private String voen;
+
+    @NotNull
+    private String mobilePhone1;
+
+    @NotNull
+    private String mobilePhone2;
 }
