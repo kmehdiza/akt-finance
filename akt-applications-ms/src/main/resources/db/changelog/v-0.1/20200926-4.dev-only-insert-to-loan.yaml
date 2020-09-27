@@ -5,3 +5,5 @@ databaseChangeLog:
       changes:
         - sql:
             sql: insert into loan (agent_username, debtor_id, step) values ("mustafa", 1, " FIRST_INFORMATIONS");
+        - sql:
+            sql: insert into loan (agent_username, debtor_id, step) values ("mustafa", 2, " FIRST_INFORMATIONS");

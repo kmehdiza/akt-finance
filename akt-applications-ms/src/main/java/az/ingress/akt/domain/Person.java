@@ -19,7 +19,6 @@ import javax.persistence.Table;
 
 import lombok.*;
 
-@Builder
 @Entity
 @Data
 @ToString(exclude = "relatives")

@@ -91,7 +91,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private void checkIfDebtorExist(Loan loan){
-        if (loan.getDebtor().getDebtor().getRelativeType().equals(RelativeType.DEBTOR)){
+        if (loan.getDebtor().getRelativeType().equals(RelativeType.DEBTOR)){
             throw new AlreadyExistException("Debtor already exist");
         }
     }
@@ -104,12 +104,12 @@ public class LoanServiceImpl implements LoanService {
 
     private Person debtorDtoToPerson(DebtorDto debtorDto){
         List<String> idImages = debtorDto.getIdImages();
-        return Person.builder()
-                .fullName(debtorDto.getFullName())
-                .finCode(debtorDto.getFinCode())
-                .idImage1(idImages.get(0))
-                .idImage2(idImages.get(1))
-                .relativeType(RelativeType.DEBTOR)
-                .build();
+        Person person = new Person();
+        person.setFullName(debtorDto.getFullName());
+        person.setFinCode(debtorDto.getFinCode());
+        person.setIdImage1(idImages.get(0));
+        person.setIdImage2(idImages.get(1));
+        person.setRelativeType(RelativeType.DEBTOR);
+        return person;
     }
 }
