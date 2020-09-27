@@ -27,4 +27,25 @@ databaseChangeLog:
               - column:
                   name: create_date
                   type: datetime
+              - column:
+                  name: requested_loan_amount
+                  type: double
+              - column:
+                  name: requested_loan_duration
+                  type: int
+              - column:
+                  name: initial_allocation
+                  type: varchar(50)
+              - column:
+                  name: initial_allocation_details
+                  type: varchar(50)
+              - column:
+                  name: voen
+                  type: varchar(50)
+              - column:
+                  name: mobile_phone1
+                  type: varchar(50)
+              - column:
+                  name: mobile_phone2
+                  type: varchar(50)
             tableName: loan
