@@ -2,16 +2,23 @@ package az.ingress.akt.service.impl;
 
 import az.ingress.akt.client.UserManagementClient;
 import az.ingress.akt.domain.Loan;
+import az.ingress.akt.domain.Person;
+import az.ingress.akt.domain.enums.RelativeType;
 import az.ingress.akt.domain.enums.Status;
 import az.ingress.akt.domain.enums.Step;
+import az.ingress.akt.dto.DebtorDto;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.dto.PersonDto;
 import az.ingress.akt.repository.LoanRepository;
+import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
+import az.ingress.akt.web.rest.exception.AlreadyExistException;
+import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +34,7 @@ public class LoanServiceImpl implements LoanService {
 
     private final SecurityUtils securityUtils;
     private final LoanRepository loanRepository;
+    private final PersonRepository personRepository;
     private final ModelMapper mapper;
     private final UserManagementClient userManagementClient;
 
@@ -53,6 +61,23 @@ public class LoanServiceImpl implements LoanService {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    @Transactional
+    public void createDebtor(Long applicationId, DebtorDto debtorDto) {
+        loanRepository.findByIdAndAgentUsername(applicationId,getAgentUsername()).map(
+                loan -> {
+                    checkIfDebtorExist(loan);
+                    checkLoanStep(loan);
+                    Person person = debtorDtoToPerson(debtorDto);
+                    mapper.map(debtorDto,loan);
+                    loan.setStep(Step.FIRST_INFORMATIONS);
+                    loanRepository.save(loan);
+                    personRepository.save(person);
+                    return loan;
+                }
+        ).orElseThrow(()-> new NotFoundException(String.format("Loan with id: '%d' and username: '%s' does not exist.",applicationId,getAgentUsername())));
+    }
+
     private Loan findByIdAndAgentUsername(Long loanId) {
         return loanRepository.findByIdAndAgentUsername(loanId, getAgentUsername())
                 .orElseThrow(() -> new NotFoundException(
@@ -65,4 +90,26 @@ public class LoanServiceImpl implements LoanService {
                 .orElseThrow(() -> new NotFoundException("Agent username not found"));
     }
 
+    private void checkIfDebtorExist(Loan loan){
+        if (loan.getDebtor().getDebtor().getRelativeType().equals(RelativeType.DEBTOR)){
+            throw new AlreadyExistException("Debtor already exist");
+        }
+    }
+
+    private void checkLoanStep(Loan loan){
+        if (!loan.getStep().equals(Step.CREATED)){
+            throw new InvalidStateException("You must enter CREATED step.");
+        }
+    }
+
+    private Person debtorDtoToPerson(DebtorDto debtorDto){
+        List<String> idImages = debtorDto.getIdImages();
+        return Person.builder()
+                .fullName(debtorDto.getFullName())
+                .finCode(debtorDto.getFinCode())
+                .idImage1(idImages.get(0))
+                .idImage2(idImages.get(1))
+                .relativeType(RelativeType.DEBTOR)
+                .build();
+    }
 }
