@@ -64,18 +64,20 @@ public class LoanServiceImpl implements LoanService {
     @Override
     @Transactional
     public void createDebtor(Long applicationId, DebtorDto debtorDto) {
-        loanRepository.findByIdAndAgentUsername(applicationId,getAgentUsername()).map(
+        loanRepository.findByIdAndAgentUsername(applicationId, getAgentUsername()).map(
                 loan -> {
                     checkIfDebtorExist(loan);
                     checkLoanStep(loan);
-                    Person person = debtorDtoToPerson(debtorDto);
-                    mapper.map(debtorDto,loan);
+                    mapper.map(debtorDto, loan);
                     loan.setStep(Step.FIRST_INFORMATIONS);
                     loanRepository.save(loan);
-                    personRepository.save(person);
+                    personRepository.save(debtorDtoToPerson(debtorDto));
                     return loan;
                 }
-        ).orElseThrow(()-> new NotFoundException(String.format("Loan with id: '%d' and username: '%s' does not exist.",applicationId,getAgentUsername())));
+        ).orElseThrow(() ->
+                new NotFoundException(
+                        String.format("Loan with id: '%d' " +
+                                "and username: '%s' does not exist.", applicationId, getAgentUsername())));
     }
 
     private Loan findByIdAndAgentUsername(Long loanId) {
@@ -90,19 +92,19 @@ public class LoanServiceImpl implements LoanService {
                 .orElseThrow(() -> new NotFoundException("Agent username not found"));
     }
 
-    private void checkIfDebtorExist(Loan loan){
-        if (loan.getDebtor().getRelativeType().equals(RelativeType.DEBTOR)){
+    private void checkIfDebtorExist(Loan loan) {
+        if (loan.getDebtor().getRelativeType().equals(RelativeType.DEBTOR)) {
             throw new AlreadyExistException("Debtor already exist");
         }
     }
 
-    private void checkLoanStep(Loan loan){
-        if (!loan.getStep().equals(Step.CREATED)){
+    private void checkLoanStep(Loan loan) {
+        if (!loan.getStep().equals(Step.CREATED)) {
             throw new InvalidStateException("You must enter CREATED step.");
         }
     }
 
-    private Person debtorDtoToPerson(DebtorDto debtorDto){
+    private Person debtorDtoToPerson(DebtorDto debtorDto) {
         List<String> idImages = debtorDto.getIdImages();
         Person person = new Person();
         person.setFullName(debtorDto.getFullName());

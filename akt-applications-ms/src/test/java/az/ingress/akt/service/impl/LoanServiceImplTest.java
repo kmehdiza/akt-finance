@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
 import az.ingress.akt.client.UserManagementClient;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.Person;
@@ -20,11 +19,9 @@ import az.ingress.akt.web.rest.exception.AlreadyExistException;
 import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
-
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,13 +72,13 @@ public class LoanServiceImplTest {
 
     private Loan loan;
     private DebtorDto debtorDto;
-    private Person debtor;
+
 
     @BeforeEach
     @SuppressWarnings("checkstyle:methodlength")
     void setUp() {
 
-        debtor = new Person();
+        Person debtor = new Person();
         debtor.setId(DUMMY_ID);
         debtor.setFinCode(DUMMY_FIN_CODE);
         debtor.setFullName(DUMMY_FULL_NAME);
@@ -233,19 +230,19 @@ public class LoanServiceImplTest {
         loan.setStep(Step.FIRST_INFORMATIONS);
 
         //Assert
-        assertThatThrownBy(()->loanService.createDebtor(DUMMY_ID,debtorDto))
+        assertThatThrownBy(() -> loanService.createDebtor(DUMMY_ID, debtorDto))
                 .isInstanceOf(InvalidStateException.class).hasMessage(InvalidStateException.MESSAGE);
     }
 
     @Test
-    public void givenLoanStepChangeWhenCreateDebtorThenExpectOk(){
+    public void givenLoanStepChangeWhenCreateDebtorThenExpectOk() {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(DUMMY_ID, DUMMY_USERNAME)).thenReturn(Optional.of(loan));
         //Act
         loan.getDebtor().setRelativeType(RelativeType.BROTHER);
         loan.setStep(Step.CREATED);
-        loanService.createDebtor(DUMMY_ID,debtorDto);
+        loanService.createDebtor(DUMMY_ID, debtorDto);
 
         //Assert
         assertThat(loan.getStep()).isEqualTo(Step.FIRST_INFORMATIONS);

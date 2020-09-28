@@ -19,9 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-
 import java.util.Arrays;
-
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_MESSAGE;
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_PATH;
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_STATUS;
@@ -43,7 +41,6 @@ public class LoanControllerTest {
     private static final String CREATE_RELATIVE_PATH = "/loan";
     private static final String CREATE_DEBTOR_PATH = "/debtor/{applicationId}";
     private static final String CREATE_DEBTOR_ERROR_PATH = "/debtor/" + Long.toString(DUMMY_APPLICATION_ID);
-    private static final String DUMMY_USERNAME = "username";
     public static final String DUMMY_FIN_CODE = "151fgf6";
     public static final String DUMMY_FULL_NAME = "James Smith";
     public static final String DUMMY_IMAGE = "image";
@@ -166,7 +163,7 @@ public class LoanControllerTest {
     }
 
     @Test
-    public void givenListIdImagesIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception{
+    public void givenListIdImagesIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
         debtorDto.setIdImages(null);
 
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
@@ -230,7 +227,7 @@ public class LoanControllerTest {
     }
 
     @Test
-    public void givenRequestedLoanAmountNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception{
+    public void givenRequestedLoanAmountNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
         debtorDto.setRequestedLoanAmount(null);
 
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
