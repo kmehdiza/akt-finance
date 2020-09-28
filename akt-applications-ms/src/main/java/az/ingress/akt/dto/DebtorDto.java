@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
@@ -13,7 +14,7 @@ import java.util.List;
 @Data
 public class DebtorDto {
 
-    //@NotBlank(message = "You should provide both side of pictures")
+    @NotNull(message = "You should provide both side of pictures")
     private List<String> idImages;
 
     @NotBlank(message = "You should provide full name")
@@ -27,10 +28,10 @@ public class DebtorDto {
 
     private String mobilePhone2;
 
-    //@NotBlank(message = "You should provide requested loan amount")
+    @NotNull(message = "You should provide requested loan amount")
     private Double requestedLoanAmount;
 
-    //@NotBlank(message = "You should provide requested loan duration")
+    @NotNull(message = "You should provide requested loan duration")
     private Integer requestedLoanDuration;
 
     @NotBlank(message = "You should provide initial allocation")
