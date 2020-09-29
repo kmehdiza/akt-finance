@@ -312,6 +312,5 @@ public class LoanControllerTest {
                 .andExpect(jsonPath(TIMESTAMP).isNotEmpty())
                 .andExpect(jsonPath(HttpResponseConstants.ERROR_PHRASE, is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
                 .andExpect(jsonPath(ERROR_PATH, is(CREATE_DEBTOR_ERROR_PATH)));
-
     }
 }
