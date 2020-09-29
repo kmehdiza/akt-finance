@@ -115,9 +115,11 @@ public class LoanControllerTest {
 
     @Test
     public void givenAgentUsernameIsNotExistWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         doThrow(new NotFoundException(INVALID_STATE_EXCEPTION_MESSAGE)).when(loanService)
                 .createDebtor(DUMMY_APPLICATION_ID, debtorDto);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -132,9 +134,11 @@ public class LoanControllerTest {
 
     @Test
     public void givenExistDebtorWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         doThrow(DebtorAlreadyExist.class).when(loanService)
                 .createDebtor(DUMMY_APPLICATION_ID, debtorDto);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -148,8 +152,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenNegativeApplicationIdWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         Long negativeId = -1L;
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, negativeId)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -164,8 +170,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenListIdImagesIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setIdImages(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -180,8 +188,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenFullNameIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setFullName(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -196,8 +206,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenFinCodeNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setFinCode(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -212,8 +224,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenMobilePhoneIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setMobilePhone1(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -228,8 +242,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenRequestedLoanAmountNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setRequestedLoanAmount(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -245,8 +261,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenRequestedLoanDurationIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setRequestedLoanDuration(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -262,8 +280,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenInitialAllocationNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setInitialAllocation(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -278,8 +298,10 @@ public class LoanControllerTest {
 
     @Test
     public void givenInitialAllocationDetailsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
+        //Arrange
         debtorDto.setInitialAllocationDetails(null);
 
+        //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
                 .content(objectMapper.writeValueAsString(debtorDto))
                 .contentType(MediaType.APPLICATION_JSON)
