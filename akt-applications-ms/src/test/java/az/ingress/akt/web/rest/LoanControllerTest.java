@@ -4,7 +4,7 @@ import az.ingress.akt.dto.DebtorDto;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.security.jwt.TokenProvider;
 import az.ingress.akt.service.LoanService;
-import az.ingress.akt.web.rest.exception.AlreadyExistException;
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,6 +51,7 @@ public class LoanControllerTest {
     private static final String DUMMY_MOBILE_PHONE1 = "055";
     private static final String DUMMY_MOBILE_PHONE2 = "050";
     private static final String ID_MUST_BE_POSITIVE = "ID must be positive";
+    private static final String INVALID_STATE_EXCEPTION_MESSAGE = "You must enter CREATED step.";
     private final IdDto idDto = new IdDto(DUMMY_APPLICATION_ID);
 
 
@@ -114,7 +115,7 @@ public class LoanControllerTest {
 
     @Test
     public void givenAgentUsernameIsNotExistWhenCreateDebtorThenExceptionThrow() throws Exception {
-        doThrow(new NotFoundException(NotFoundException.MESSAGE)).when(loanService)
+        doThrow(new NotFoundException(INVALID_STATE_EXCEPTION_MESSAGE)).when(loanService)
                 .createDebtor(DUMMY_APPLICATION_ID, debtorDto);
 
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
@@ -123,7 +124,7 @@ public class LoanControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath(ERROR_STATUS, is(HttpStatus.NOT_FOUND.value())))
-                .andExpect(jsonPath(ERROR_MESSAGE, is(NotFoundException.MESSAGE)))
+                .andExpect(jsonPath(ERROR_MESSAGE, is(INVALID_STATE_EXCEPTION_MESSAGE)))
                 .andExpect(jsonPath(TIMESTAMP).isNotEmpty())
                 .andExpect(jsonPath(HttpResponseConstants.ERROR_PHRASE, is(HttpStatus.NOT_FOUND.getReasonPhrase())))
                 .andExpect(jsonPath(ERROR_PATH, is(CREATE_DEBTOR_ERROR_PATH)));
@@ -131,7 +132,7 @@ public class LoanControllerTest {
 
     @Test
     public void givenExistDebtorWhenCreateDebtorThenExceptionThrow() throws Exception {
-        doThrow(new AlreadyExistException(AlreadyExistException.MESSAGE)).when(loanService)
+        doThrow(DebtorAlreadyExist.class).when(loanService)
                 .createDebtor(DUMMY_APPLICATION_ID, debtorDto);
 
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
@@ -140,7 +141,6 @@ public class LoanControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(ERROR_STATUS, is(HttpStatus.BAD_REQUEST.value())))
-                .andExpect(jsonPath(ERROR_MESSAGE, is(AlreadyExistException.MESSAGE)))
                 .andExpect(jsonPath(TIMESTAMP).isNotEmpty())
                 .andExpect(jsonPath(HttpResponseConstants.ERROR_PHRASE, is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
                 .andExpect(jsonPath(ERROR_PATH, is(CREATE_DEBTOR_ERROR_PATH)));

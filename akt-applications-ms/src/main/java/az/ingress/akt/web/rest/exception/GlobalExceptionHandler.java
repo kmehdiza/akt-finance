@@ -36,8 +36,8 @@ public class GlobalExceptionHandler extends DefaultErrorAttributes {
         return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(AlreadyExistException.class)
-    public final ResponseEntity<Map<String, Object>> handleAlreadyExistException(AlreadyExistException ex,
+    @ExceptionHandler(IllegalStateException.class)
+    public final ResponseEntity<Map<String, Object>> handleIllegalStateException(IllegalStateException ex,
                                                                                  WebRequest request) {
         return ofType(request, HttpStatus.BAD_REQUEST, ex.getMessage());
     }

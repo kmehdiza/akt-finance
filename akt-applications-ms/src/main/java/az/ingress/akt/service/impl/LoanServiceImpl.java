@@ -13,7 +13,7 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
-import az.ingress.akt.web.rest.exception.AlreadyExistException;
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
 import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
@@ -94,7 +94,7 @@ public class LoanServiceImpl implements LoanService {
 
     private void checkIfDebtorExist(Loan loan) {
         if (loan.getDebtor().getRelativeType().equals(RelativeType.DEBTOR)) {
-            throw new AlreadyExistException("Debtor already exist");
+            throw new DebtorAlreadyExist();
         }
     }
 

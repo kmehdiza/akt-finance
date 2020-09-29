@@ -15,7 +15,7 @@ import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
-import az.ingress.akt.web.rest.exception.AlreadyExistException;
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
 import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
@@ -47,6 +47,8 @@ public class LoanServiceImplTest {
     private static final String DUMMY_VOEN = "tax12";
     public static final String AGENT_USERNAME_NOT_FOUND_ERROR_MESSAGE = "Agent username not found";
     private static final Long DUMMY_ID = 1L;
+    private static final String NOT_FOUND_EXCEPTION_MESSAGE = "Agent username not found";
+    private static final String INVALID_STATE_EXCEPTION_MESSAGE = "You must enter CREATED step.";
     private static final String LOAN_NOT_FOUND_EXCEPTION_MESSAGE =
             String.format("Loan with id: '%d' and agent username: '%s' does not exist ", DUMMY_ID,
                     DUMMY_USERNAME);
@@ -202,7 +204,7 @@ public class LoanServiceImplTest {
 
         // Act && Assert
         assertThatThrownBy(() -> loanService.createDebtor(DUMMY_ID, debtorDto))
-                .isInstanceOf(NotFoundException.class).hasMessage(NotFoundException.MESSAGE);
+                .isInstanceOf(NotFoundException.class).hasMessage(NOT_FOUND_EXCEPTION_MESSAGE);
     }
 
     @Test
@@ -216,7 +218,7 @@ public class LoanServiceImplTest {
 
         //Assert
         assertThatThrownBy(() -> loanService.createDebtor(DUMMY_ID, debtorDto))
-                .isInstanceOf(AlreadyExistException.class).hasMessage(AlreadyExistException.MESSAGE);
+                .isInstanceOf(DebtorAlreadyExist.class);
     }
 
     @Test
@@ -231,7 +233,7 @@ public class LoanServiceImplTest {
 
         //Assert
         assertThatThrownBy(() -> loanService.createDebtor(DUMMY_ID, debtorDto))
-                .isInstanceOf(InvalidStateException.class).hasMessage(InvalidStateException.MESSAGE);
+                .isInstanceOf(InvalidStateException.class).hasMessage(INVALID_STATE_EXCEPTION_MESSAGE);
     }
 
     @Test
