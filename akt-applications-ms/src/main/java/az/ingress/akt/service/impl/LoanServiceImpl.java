@@ -13,11 +13,9 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
-
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import az.ingress.akt.web.rest.exception.DebtorAlreadyExistException;
 import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.LoanWithTheAgentNotFoundException;
