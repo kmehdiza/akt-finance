@@ -45,4 +45,13 @@ databaseChangeLog:
               - column:
                   name: signature_image
                   type: varchar(255)
+              - column:
+                  name: voen
+                  type: varchar(50)
+              - column:
+                  name: mobile_phone1
+                  type: varchar(50)
+              - column:
+                  name: mobile_phone2
+                  type: varchar(50)
             tableName: person

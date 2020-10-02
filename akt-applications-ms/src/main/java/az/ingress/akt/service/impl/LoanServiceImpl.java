@@ -13,14 +13,12 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
-import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
-import az.ingress.akt.web.rest.exception.InvalidStateException;
-import az.ingress.akt.web.rest.exception.NotFoundException;
-import az.ingress.akt.web.rest.exception.UserNotFoundException;
+import az.ingress.akt.web.rest.exception.*;
+
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -55,7 +53,7 @@ public class LoanServiceImpl implements LoanService {
     @Override
     @Transactional
     public Set<PersonDto> getRelativesByLoanId(Long loanId) {
-        Loan loan = findByIdAndAgentUsername(loanId);
+        Loan loan = checkIfLoanExistWithCurrentAgent(loanId);
         return loan.getDebtor().getRelatives().stream()
                 .map(p -> mapper.map(p, PersonDto.class))
                 .collect(Collectors.toSet());
@@ -63,27 +61,22 @@ public class LoanServiceImpl implements LoanService {
 
     @Override
     @Transactional
-    public void createDebtor(Long applicationId, DebtorDto debtorDto) {
-        loanRepository.findByIdAndAgentUsername(applicationId, getAgentUsername()).map(
-                loan -> {
-                    checkIfDebtorExist(loan);
-                    checkLoanStep(loan);
-                    mapper.map(debtorDto, loan);
-                    loan.setStep(Step.FIRST_INFORMATIONS);
-                    loanRepository.save(loan);
-                    personRepository.save(debtorDtoToPerson(debtorDto));
-                    return loan;
-                }
-        ).orElseThrow(() ->
-                new NotFoundException(
-                        String.format("Loan with id: '%d' " +
-                                "and username: '%s' does not exist.", applicationId, getAgentUsername())));
+    public void createDebtor(Long loanId, DebtorDto debtorDto) {
+        Loan loan = checkIfLoanExistWithCurrentAgent(loanId);
+        Person person = debtorDtoToPerson(debtorDto);
+        checkIfDebtorExist(loan);
+        checkLoanStep(loan);
+        mapper.map(debtorDto, loan);
+        loan.setStep(Step.FIRST_INFORMATIONS);
+        loanRepository.save(loan);
+        personRepository.save(person);
     }
 
-    private Loan findByIdAndAgentUsername(Long loanId) {
+
+    private Loan checkIfLoanExistWithCurrentAgent(Long loanId) {
         return loanRepository.findByIdAndAgentUsername(loanId, getAgentUsername())
-                .orElseThrow(() -> new NotFoundException(
-                        String.format("Loan with id: '%d' and agent username: '%s' does not exist ", loanId,
+                .orElseThrow(() -> new LoanWithTheAgentNotFoundException(
+                        String.format(LoanWithTheAgentNotFoundException.MESSAGE, loanId,
                                 getAgentUsername())));
     }
 
@@ -93,8 +86,8 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private void checkIfDebtorExist(Loan loan) {
-        if (loan.getDebtor().getRelativeType().equals(RelativeType.DEBTOR)) {
-            throw new DebtorAlreadyExist();
+        if (loan.getDebtor().getRelativeType() == RelativeType.DEBTOR) {
+            throw new DebtorAlreadyExistException(DebtorAlreadyExistException.MESSAGE);
         }
     }
 
@@ -105,12 +98,7 @@ public class LoanServiceImpl implements LoanService {
     }
 
     private Person debtorDtoToPerson(DebtorDto debtorDto) {
-        List<String> idImages = debtorDto.getIdImages();
         Person person = new Person();
-        person.setFullName(debtorDto.getFullName());
-        person.setFinCode(debtorDto.getFinCode());
-        person.setIdImage1(idImages.get(0));
-        person.setIdImage2(idImages.get(1));
         person.setRelativeType(RelativeType.DEBTOR);
         return person;
     }

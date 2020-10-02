@@ -25,9 +25,9 @@ public class LoanController {
         return applicationService.createApplication();
     }
 
-    @PostMapping("/debtor/{applicationId}")
+    @PostMapping("/debtor/{loanId}")
     public void createDebtor(
-            @PathVariable("applicationId") @Positive(message = ID_MUST_BE_POSITIVE) Long loanId,
+            @PathVariable("loanId") @Positive(message = ID_MUST_BE_POSITIVE) Long loanId,
             @RequestBody @Validated DebtorDto debtorDto
     ) {
         applicationService.createDebtor(loanId, debtorDto);

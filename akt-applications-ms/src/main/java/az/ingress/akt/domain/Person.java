@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.sun.istack.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -23,8 +24,8 @@ import lombok.ToString;
 
 @Entity
 @Data
-@ToString(exclude = "relatives")
-@EqualsAndHashCode(exclude = "relatives")
+@ToString(exclude = {"debtor", "relatives"})
+@EqualsAndHashCode(exclude = {"debtor", "relatives"})
 @NoArgsConstructor
 @Table(name = Person.TABLE_NAME, indexes = {
         @Index(columnList = Person.FIN_CODE_COLUMN, name = Person.FIN_CODE_INDEX, unique = true)
@@ -60,5 +61,13 @@ public class Person {
     private String idImage2;
 
     private String signatureImage;
+
+    private String voen;
+
+    @NotNull
+    private String mobilePhone1;
+
+    @NotNull
+    private String mobilePhone2;
 }
 

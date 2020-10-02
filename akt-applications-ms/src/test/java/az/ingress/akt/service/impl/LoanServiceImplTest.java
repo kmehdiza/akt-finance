@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 import az.ingress.akt.client.UserManagementClient;
 import az.ingress.akt.domain.Loan;
 import az.ingress.akt.domain.Person;
@@ -15,13 +16,14 @@ import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
-import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExistException;
 import az.ingress.akt.web.rest.exception.InvalidStateException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
+
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -75,7 +77,6 @@ public class LoanServiceImplTest {
     private Loan loan;
     private DebtorDto debtorDto;
 
-
     @BeforeEach
     @SuppressWarnings("checkstyle:methodlength")
     void setUp() {
@@ -100,7 +101,8 @@ public class LoanServiceImplTest {
         debtorDto = DebtorDto.builder()
                 .fullName(DUMMY_FULL_NAME)
                 .finCode(DUMMY_FIN_CODE)
-                .idImages(Arrays.asList(DUMMY_IMAGE, DUMMY_IMAGE))
+                .idImage1(DUMMY_IMAGE)
+                .idImage2(DUMMY_IMAGE)
                 .initialAllocation(DUMMY_INITIAL_ALLOCATION)
                 .initialAllocationDetails(DUMMY_INITIAL_ALLOCATION_DETAIL)
                 .requestedLoanAmount(DUMMY_REQUESTED_LOAN_AMOUNT)
@@ -218,7 +220,7 @@ public class LoanServiceImplTest {
 
         //Assert
         assertThatThrownBy(() -> loanService.createDebtor(DUMMY_ID, debtorDto))
-                .isInstanceOf(DebtorAlreadyExist.class);
+                .isInstanceOf(DebtorAlreadyExistException.class);
     }
 
     @Test
@@ -241,6 +243,7 @@ public class LoanServiceImplTest {
         //Arrange
         when(securityUtils.getCurrentUserLogin()).thenReturn(Optional.of(DUMMY_USERNAME));
         when(loanRepository.findByIdAndAgentUsername(DUMMY_ID, DUMMY_USERNAME)).thenReturn(Optional.of(loan));
+
         //Act
         loan.getDebtor().setRelativeType(RelativeType.BROTHER);
         loan.setStep(Step.CREATED);

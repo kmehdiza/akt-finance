@@ -14,8 +14,11 @@ import java.util.List;
 @Data
 public class DebtorDto {
 
-    @NotNull(message = "You should provide both side of pictures")
-    private List<String> idImages;
+    @NotNull(message = "You should provide image1 here")
+    private String idImage1;
+
+    @NotNull(message = "You should provide image2 here")
+    private String idImage2;
 
     @NotBlank(message = "You should provide full name")
     private String fullName;

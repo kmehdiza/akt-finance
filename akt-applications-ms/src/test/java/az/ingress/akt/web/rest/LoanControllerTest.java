@@ -4,7 +4,7 @@ import az.ingress.akt.dto.DebtorDto;
 import az.ingress.akt.dto.IdDto;
 import az.ingress.akt.security.jwt.TokenProvider;
 import az.ingress.akt.service.LoanService;
-import az.ingress.akt.web.rest.exception.DebtorAlreadyExist;
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExistException;
 import az.ingress.akt.web.rest.exception.NotFoundException;
 import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import java.util.Arrays;
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_MESSAGE;
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_PATH;
 import static az.ingress.akt.web.rest.HttpResponseConstants.ERROR_STATUS;
@@ -39,7 +38,7 @@ public class LoanControllerTest {
 
     private static final Long DUMMY_APPLICATION_ID = 1L;
     private static final String CREATE_RELATIVE_PATH = "/loan";
-    private static final String CREATE_DEBTOR_PATH = "/debtor/{applicationId}";
+    private static final String CREATE_DEBTOR_PATH = "/debtor/{loanId}";
     private static final String CREATE_DEBTOR_ERROR_PATH = "/debtor/" + Long.toString(DUMMY_APPLICATION_ID);
     public static final String DUMMY_FIN_CODE = "151fgf6";
     public static final String DUMMY_FULL_NAME = "James Smith";
@@ -75,7 +74,8 @@ public class LoanControllerTest {
         debtorDto = DebtorDto.builder()
                 .fullName(DUMMY_FULL_NAME)
                 .finCode(DUMMY_FIN_CODE)
-                .idImages(Arrays.asList(DUMMY_IMAGE, DUMMY_IMAGE))
+                .idImage1(DUMMY_IMAGE)
+                .idImage2(DUMMY_IMAGE)
                 .initialAllocation(DUMMY_INITIAL_ALLOCATION)
                 .initialAllocationDetails(DUMMY_INITIAL_ALLOCATION_DETAIL)
                 .requestedLoanAmount(DUMMY_REQUESTED_LOAN_AMOUNT)
@@ -135,7 +135,7 @@ public class LoanControllerTest {
     @Test
     public void givenExistDebtorWhenCreateDebtorThenExceptionThrow() throws Exception {
         //Arrange
-        doThrow(DebtorAlreadyExist.class).when(loanService)
+        doThrow(DebtorAlreadyExistException.class).when(loanService)
                 .createDebtor(DUMMY_APPLICATION_ID, debtorDto);
 
         //Act
@@ -171,7 +171,7 @@ public class LoanControllerTest {
     @Test
     public void givenListIdImagesIsNotPresentWhenCreateDebtorThenExceptionThrow() throws Exception {
         //Arrange
-        debtorDto.setIdImages(null);
+        debtorDto.setIdImage1(null);
 
         //Act
         mockMvc.perform(post(CREATE_DEBTOR_PATH, DUMMY_APPLICATION_ID)
@@ -180,7 +180,7 @@ public class LoanControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(ERROR_STATUS, is(HttpStatus.BAD_REQUEST.value())))
-                .andExpect(jsonPath(ERROR_MESSAGE, is("You should provide both side of pictures")))
+                .andExpect(jsonPath(ERROR_MESSAGE, is("You should provide image1 here")))
                 .andExpect(jsonPath(TIMESTAMP).isNotEmpty())
                 .andExpect(jsonPath(HttpResponseConstants.ERROR_PHRASE, is(HttpStatus.BAD_REQUEST.getReasonPhrase())))
                 .andExpect(jsonPath(ERROR_PATH, is(CREATE_DEBTOR_ERROR_PATH)));

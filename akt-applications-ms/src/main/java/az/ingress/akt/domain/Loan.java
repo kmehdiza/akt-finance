@@ -62,11 +62,4 @@ public class Loan {
     @NotNull
     private String initialAllocationDetails;
 
-    private String voen;
-
-    @NotNull
-    private String mobilePhone1;
-
-    @NotNull
-    private String mobilePhone2;
 }
