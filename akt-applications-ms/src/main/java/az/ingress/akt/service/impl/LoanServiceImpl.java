@@ -13,12 +13,16 @@ import az.ingress.akt.repository.LoanRepository;
 import az.ingress.akt.repository.PersonRepository;
 import az.ingress.akt.security.SecurityUtils;
 import az.ingress.akt.service.LoanService;
-import az.ingress.akt.web.rest.exception.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import az.ingress.akt.web.rest.exception.DebtorAlreadyExistException;
+import az.ingress.akt.web.rest.exception.InvalidStateException;
+import az.ingress.akt.web.rest.exception.LoanWithTheAgentNotFoundException;
+import az.ingress.akt.web.rest.exception.NotFoundException;
+import az.ingress.akt.web.rest.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -63,13 +67,12 @@ public class LoanServiceImpl implements LoanService {
     @Transactional
     public void createDebtor(Long loanId, DebtorDto debtorDto) {
         Loan loan = checkIfLoanExistWithCurrentAgent(loanId);
-        Person person = debtorDtoToPerson(debtorDto);
         checkIfDebtorExist(loan);
         checkLoanStep(loan);
         mapper.map(debtorDto, loan);
         loan.setStep(Step.FIRST_INFORMATIONS);
         loanRepository.save(loan);
-        personRepository.save(person);
+        personRepository.save(debtorDtoToPerson(debtorDto));
     }
 
 
@@ -99,7 +102,14 @@ public class LoanServiceImpl implements LoanService {
 
     private Person debtorDtoToPerson(DebtorDto debtorDto) {
         Person person = new Person();
+        person.setIdImage1(debtorDto.getIdImage1());
+        person.setIdImage2(debtorDto.getIdImage2());
+        person.setFullName(debtorDto.getFullName());
+        person.setFinCode(debtorDto.getFinCode());
+        person.setMobilePhone1(debtorDto.getMobilePhone1());
+        person.setMobilePhone2(debtorDto.getMobilePhone2());
         person.setRelativeType(RelativeType.DEBTOR);
+        person.setVoen(debtorDto.getVoen());
         return person;
     }
 }

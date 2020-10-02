@@ -1,6 +1,6 @@
 package az.ingress.akt.web.rest.exception;
 
-public class LoanWithTheAgentNotFoundException extends NotFoundException{
+public class LoanWithTheAgentNotFoundException extends NotFoundException {
 
     public static final String MESSAGE = "Loan with id: '%d' and agent username: '%s' does not exist ";
 
